@@ -1,5 +1,5 @@
+import LoadingComponent from "../components/LoadingComponent";
 import Product from "../shared/Product";
-import LoadingComponent from "./LoadingComponent";
 
 interface ProductProps {
     onAddToCart: (id: string) => void;

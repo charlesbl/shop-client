@@ -20,7 +20,7 @@ export default class LoadingComponent<T, U = {}, V = {}> extends React.Component
         );
     }
 
-    renderSuccess(t: T | undefined) {
+    renderSuccess(t?: T) {
         return (
             <div>Overwrite renderSuccess()</div>
         );
@@ -28,19 +28,15 @@ export default class LoadingComponent<T, U = {}, V = {}> extends React.Component
 
 
     render() {
-        switch (this.props.loadState) {
-            case LoadState.LOADING:
-                return this.renderLoading();
-            case LoadState.ERROR:
-                return this.renderError();
-            case LoadState.SUCCESS:
-                if (this.props.data) {
-                    return this.renderSuccess(this.props.data);
-                }
-                else {
-                    return this.renderNotFound();
-                }
+        if (this.props.loadState === LoadState.LOADING)
+            return this.renderLoading();
 
-        }
+        if (this.props.loadState === LoadState.ERROR)
+            return this.renderError();
+
+        if (this.props.loadState === LoadState.SUCCESS && !this.props.data)
+            return this.renderNotFound();
+
+        return this.renderSuccess(this.props.data);
     }
 }

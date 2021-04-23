@@ -1,0 +1,17 @@
+header nav {
+    padding: 1em 1em 1em 1em;
+    background-color: var(--primary-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+header a {
+    padding: 1em;
+    color: var(--secondary-color);
+}
+
+#main {
+    margin: 2em;
+}

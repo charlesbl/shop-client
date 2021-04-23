@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, RouteComponentProps } from "react
 import HomeView from './HomeView';
 import ProductListView from './ProductListView';
 import ProductView from './ProductView';
-import LoadingData, { LoadState } from './LoadingData';
+import LoadingData, { LoadState } from '../components/LoadingData';
 import ProductList from './ProductList';
 
 interface AppState extends LoadingData<ProductList> {
@@ -23,12 +23,21 @@ export default class App extends React.Component<any, AppState> {
     }
 
     async componentDidMount() {
-        //this.fetchProduct();
+        this.fetchProduct();
     }
 
     async fetchProduct() {
         this.setState({
-            data: new ProductList({ id: "0", name: "Produit A", price: "5842" }, { id: "1", name: "Produit B", price: "2410" }),
+            data: new ProductList(
+                { id: "0", name: "Produit A", price: "5842" },
+                { id: "1", name: "Produit B", price: "2410" },
+                { id: "3", name: "Fzdqzdd", price: "5842" },
+                { id: "4", name: "HZECYHzs", price: "5842" },
+                { id: "5", name: "GHqzdh fsertg", price: "5842" },
+                { id: "6", name: "Xsef gdgr drgss seffrgt", price: "5842" },
+                { id: "7", name: "FG", price: "5842" },
+                { id: "8", name: "azrty", price: "5842" },
+            ),
             loadState: LoadState.SUCCESS
         });
         //Verify if all product in cart are available
@@ -76,18 +85,13 @@ export default class App extends React.Component<any, AppState> {
         return (
 
             <Router>
-                <div>
-                    <div>{Array.from(this.state.cart.values())}</div>
+                <header>
                     <nav>
-                        <ul>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            < li>
-                                <Link to="/products">All Products</Link>
-                            </li>
-                        </ul>
+                        <Link to="/">Home</Link>
+                        <Link to="/products">All Products</Link>
                     </nav>
+                </header>
+                <div id="main">
 
                     <Route path="/" exact component={HomeView} />
                     <Route path="/products" exact component={() => <ProductListView loadState={this.state.loadState} data={this.state.data} />} />
@@ -97,11 +101,12 @@ export default class App extends React.Component<any, AppState> {
                             data={this.state.data?.getProductById(routeComponent.match.params.id)}
                             onAddToCart={(id: string) => this.addToCart(id)} />
                     }} />
-
+                    {/*
                     <button onClick={() => this.fetchProduct()}>SUCCESS</button>
                     <button onClick={() => this.setState({ loadState: LoadState.ERROR })}>ERROR</button>
                     <button onClick={() => this.setState({ loadState: LoadState.SUCCESS, data: new ProductList() })}>No products</button>
                     <button onClick={() => this.setState({ loadState: LoadState.LOADING })}>reset</button>
+                    */}
                 </div >
             </Router >
         );

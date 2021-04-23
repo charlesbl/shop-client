@@ -1,0 +1,30 @@
+#product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+#product-list .short-product{
+    margin: 0.6em;
+    padding: 1em;
+    background-color: rgb(175, 175, 175);
+    max-width: 35em;
+}
+#product-list .short-product .name {
+    font-weight: bold;
+    margin: 0;
+}
+#product-list .short-product .name a {
+    color: var(--primary-color);
+}
+#product-list .short-product p {
+    padding-left: 0.5em;
+}
+#product-list .short-product .price {
+    display: inline;
+    font-weight: bold;
+    margin-right: 1em;
+}
+#product-list .short-product button {
+    display: inline;
+}

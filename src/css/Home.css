@@ -1,0 +1,14 @@
+#home h1 {
+    text-align: center;
+}
+
+#home p {
+    text-align: justify;
+    margin-bottom: 3em;
+}
+
+#home a {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1em;
+}
