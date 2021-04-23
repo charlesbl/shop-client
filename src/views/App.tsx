@@ -5,7 +5,7 @@ import HomeView from './HomeView';
 import ProductListView from './ProductListView';
 import ProductView from './ProductView';
 import LoadingData, { LoadState } from '../components/LoadingData';
-import ProductList from './ProductList';
+import ProductList from '../components/ProductList';
 
 interface AppState extends LoadingData<ProductList> {
     cart: Map<string, number>;
@@ -94,7 +94,12 @@ export default class App extends React.Component<any, AppState> {
                 <div id="main">
 
                     <Route path="/" exact component={HomeView} />
-                    <Route path="/products" exact component={() => <ProductListView loadState={this.state.loadState} data={this.state.data} />} />
+                    <Route path="/products" exact component={() => {
+                        return <ProductListView
+                            loadState={this.state.loadState}
+                            data={this.state.data}
+                            onAddToCart={(id: string) => this.addToCart(id)} />
+                    }} />
                     <Route path="/products/:id" component={(routeComponent: RouteComponentProps<any>) => {
                         return <ProductView
                             loadState={this.state.loadState}

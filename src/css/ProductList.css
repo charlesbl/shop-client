@@ -1,7 +1,7 @@
 #product-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
 }
 
 #product-list .short-product{

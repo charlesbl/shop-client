@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import Product from "../shared/Product";
-import ProductList from "./ProductList";
+import ProductList from "../components/ProductList";
 import LoadingComponent from "../components/LoadingComponent";
 import "../css/ProductList.css"
+import CartProps from "../components/CartProps";
 
-export default class ProductListView extends LoadingComponent<ProductList> {
+export default class ProductListView extends LoadingComponent<ProductList, CartProps> {
     renderProduct(product: Product) {
         return (
             <div key={product.id} className="short-product">

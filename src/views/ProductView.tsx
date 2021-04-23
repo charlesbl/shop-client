@@ -1,11 +1,8 @@
+import CartProps from "../components/CartProps";
 import LoadingComponent from "../components/LoadingComponent";
 import Product from "../shared/Product";
 
-interface ProductProps {
-    onAddToCart: (id: string) => void;
-}
-
-export default class ProductView extends LoadingComponent<Product, ProductProps> {
+export default class ProductView extends LoadingComponent<Product, CartProps> {
     renderSuccess(p: Product) {
         return (
             <div>
