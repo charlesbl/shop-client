@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Product from "../shared/Product";
+import Product from "../models/Product";
 import ProductList from "../components/ProductList";
 import LoadingComponent from "../components/LoadingComponent";
 import "../css/ProductList.css"

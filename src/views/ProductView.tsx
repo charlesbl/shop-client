@@ -1,6 +1,6 @@
 import CartProps from "../components/CartProps";
 import LoadingComponent from "../components/LoadingComponent";
-import Product from "../shared/Product";
+import Product from "../models/Product";
 
 export default class ProductView extends LoadingComponent<Product, CartProps> {
     renderSuccess(p: Product) {

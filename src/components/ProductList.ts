@@ -1,4 +1,4 @@
-import Product from "../shared/Product";
+import Product from "../models/Product";
 
 export default class ProductList extends Array<Product> {
     getProductById(id: string): Product | undefined {
