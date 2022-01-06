@@ -1,4 +1,6 @@
 import React from "react";
+import Product from "../models/Product";
+import { create } from "../productService";
 
 interface ComponentState {
     name: string,
@@ -19,8 +21,17 @@ export default class ProjectAddView extends React.Component<any, ComponentState>
         this.verifyForm();
     }
 
-    handleSubmit(e: React.SyntheticEvent) {
+    async handleSubmit(e: React.SyntheticEvent) {
         e.preventDefault();
+
+        let product: Product = {
+            id: "",
+            name: this.state.name,
+            desc: this.state.desc,
+            price: this.state.price
+        };
+
+        await create(product);
     }
 
     handleChange(e: any) {

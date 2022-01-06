@@ -7,6 +7,7 @@ import ProductView from './ProductView';
 import ProductAddView from './ProductAddView';
 import LoadingData, { LoadState } from '../models/LoadingData';
 import ProductList from '../models/ProductList';
+import { getAll } from '../productService';
 
 interface AppState extends LoadingData<ProductList> {
     cart: Map<string, number>;
@@ -28,27 +29,31 @@ export default class App extends React.Component<any, AppState> {
     }
 
     async fetchProduct() {
-        this.setState({
-            data: new ProductList(
-                { id: "0", name: "Produit A", price: "5842" },
-                { id: "1", name: "Produit B", price: "2410" },
-                { id: "3", name: "Fzdqzdd", price: "5842" },
-                { id: "4", name: "HZECYHzs", price: "5842" },
-                { id: "5", name: "GHqzdh fsertg", price: "5842" },
-                { id: "6", name: "Xsef gdgr drgss seffrgt", price: "5842" },
-                { id: "7", name: "FG", price: "5842" },
-                { id: "8", name: "azrty", price: "5842" },
-            ),
-            loadState: LoadState.SUCCESS
+        let success;
+        getAll().then((res) => {
+            this.setState({
+                data: res.data,
+                loadState: LoadState.SUCCESS
+            });
+            success = true;
+        }).catch((ex) => {
+            console.error(ex);
+            this.setState({
+                loadState: LoadState.ERROR
+            });
+            success = false;
         });
-        //Verify if all product in cart are available
-        Array.from(this.state.cart.keys()).forEach((id: string) => {
-            if (this.state.data) {
-                if (!this.state.data.getProductById(id)) {
-                    this.removeAllFromCart(id);
+
+        if (success) {
+            //Verify if all product in cart are available
+            Array.from(this.state.cart.keys()).forEach((id: string) => {
+                if (this.state.data) {
+                    if (!this.state.data.getProductById(id)) {
+                        this.removeAllFromCart(id);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     removeAllFromCart(id: string) {
