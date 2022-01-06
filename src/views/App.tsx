@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Route, Link, RouteComponentProps } from "react
 import HomeView from './HomeView';
 import ProductListView from './ProductListView';
 import ProductView from './ProductView';
-import LoadingData, { LoadState } from '../components/LoadingData';
-import ProductList from '../components/ProductList';
+import ProductAddView from './ProductAddView';
+import LoadingData, { LoadState } from '../models/LoadingData';
+import ProductList from '../models/ProductList';
 
 interface AppState extends LoadingData<ProductList> {
     cart: Map<string, number>;
@@ -89,6 +90,7 @@ export default class App extends React.Component<any, AppState> {
                     <nav>
                         <Link to="/">Home</Link>
                         <Link to="/products">All Products</Link>
+                        <Link to="/addproduct">Add Product</Link>
                     </nav>
                 </header>
                 <div id="main">
@@ -100,11 +102,14 @@ export default class App extends React.Component<any, AppState> {
                             data={this.state.data}
                             onAddToCart={(id: string) => this.addToCart(id)} />
                     }} />
-                    <Route path="/products/:id" component={(routeComponent: RouteComponentProps<any>) => {
+                    <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
                         return <ProductView
                             loadState={this.state.loadState}
                             data={this.state.data?.getProductById(routeComponent.match.params.id)}
                             onAddToCart={(id: string) => this.addToCart(id)} />
+                    }} />
+                    <Route path="/addproduct/" component={(routeComponent: RouteComponentProps<any>) => {
+                        return <ProductAddView />
                     }} />
                     {/*
                     <button onClick={() => this.fetchProduct()}>SUCCESS</button>

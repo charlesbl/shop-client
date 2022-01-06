@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingData, { LoadState } from "./LoadingData";
+import LoadingData, { LoadState } from "../models/LoadingData";
 
 export default class LoadingComponent<T, U = {}, V = {}> extends React.Component<LoadingData<T> & U, V> {
     renderLoading() {

@@ -1,4 +1,4 @@
-import CartProps from "../components/CartProps";
+import CartProps from "../models/CartProps";
 import LoadingComponent from "../components/LoadingComponent";
 import Product from "../models/Product";
 
