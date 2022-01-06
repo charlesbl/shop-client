@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  shopclient:
-    image: shopclient
+  shop-client:
+    image: shop-client
     build:
       context: .
       dockerfile: ./Dockerfile
