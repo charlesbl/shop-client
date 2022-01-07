@@ -1,12 +1,9 @@
-import CartProps from "../models/CartProps";
-import LoadingComponent from "../components/LoadingComponent";
 import Product from "../models/Product";
-import { remove } from "../productService";
+import { getById, remove } from "../productService";
 import { Redirect } from "react-router-dom";
-
-interface ComponentProps extends CartProps {
-    onProductRemove: (p: Product) => Promise<void>;
-}
+import LoadingDataState, { LoadState } from "../models/LoadingData";
+import React from "react";
+import { getLocalData, setLocalData } from "../utils";
 
 enum DISPLAY_STATES {
     DISPLAY,
@@ -15,18 +12,57 @@ enum DISPLAY_STATES {
     REDIRECT
 }
 
-interface ComponentState {
+interface ComponentState extends LoadingDataState<Product> {
     displayState: DISPLAY_STATES;
 }
 
-export default class ProductView extends LoadingComponent<Product, ComponentProps, ComponentState> {
+interface ComponentProps {
+    productId: string;
+}
 
-    constructor(props: any) {
+const LOCALSTORAGE_DATA_KEY = "product";
+export default class ProductView extends React.Component<ComponentProps, ComponentState> {
+    private _isMounted: boolean;
+
+    constructor(props: ComponentProps) {
         super(props);
 
         this.state = {
+            loadState: LoadState.LOADING,
+            data: getLocalData(LOCALSTORAGE_DATA_KEY + props.productId),
             displayState: DISPLAY_STATES.DISPLAY
-        };
+        }
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    async componentDidMount() {
+        const product = await this.fetchProduct();
+        if (product) {
+            if (this._isMounted) {
+                this.setState({
+                    data: product,
+                    loadState: LoadState.SUCCESS
+                });
+            }
+            setLocalData<Product>(LOCALSTORAGE_DATA_KEY + this.props.productId, product);
+        }
+    }
+
+    async fetchProduct(): Promise<Product | undefined> {
+        try {
+            const res = await getById(this.props.productId);
+            return res.data;
+        } catch (ex) {
+            console.error(ex);
+            this.setState({
+                loadState: LoadState.ERROR
+            });
+            return undefined;
+        }
     }
 
     removeProduct(p: Product) {
@@ -34,14 +70,17 @@ export default class ProductView extends LoadingComponent<Product, ComponentProp
             displayState: DISPLAY_STATES.REMOVING
         });
         remove(p.id).then((res) => {
+            if (!this._isMounted)
+                return;
             this.setState({
                 displayState: DISPLAY_STATES.REMOVED
             });
             setTimeout(async () => {
+                if (!this._isMounted)
+                    return;
                 this.setState({
                     displayState: DISPLAY_STATES.REDIRECT
                 });
-                await this.props.onProductRemove(p);
             }, 1000);
         });
     }
@@ -49,14 +88,14 @@ export default class ProductView extends LoadingComponent<Product, ComponentProp
     renderSuccess(p: Product) {
         return (
             <div>
-                <div>{p.id} {p.name} {p.price}</div>
-                <button onClick={() => this.props.onProductAddToCart(p.id)}>Add to cart</button>
-                <button onClick={() => this.removeProduct(p)}>Remove from database</button>
+                <div>{p.id} {p.name} {p.desc} {p.price}</div>
+                {/* <button onClick={() => this.props.onProductAddToCart(p.id)}>Add to cart</button> */}
+                <button onClick={() => this.removeProduct(p)} disabled={this.state.loadState !== LoadState.SUCCESS}>Remove from database</button>
             </div>
         );
     }
 
-    render(): JSX.Element {
+    render() {
         if (this.state.displayState === DISPLAY_STATES.REDIRECT) {
             return (
                 <Redirect to="/products" />
@@ -72,6 +111,12 @@ export default class ProductView extends LoadingComponent<Product, ComponentProp
                 <div>Removing...</div>
             );
         }
-        return super.render();
+        if (this.state.data) {
+            return this.renderSuccess(this.state.data);
+        } else {
+            return (
+                <div>loading...</div>
+            );
+        }
     }
 }

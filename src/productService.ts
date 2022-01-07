@@ -19,3 +19,7 @@ export function create(data: Product): Promise<AxiosResponse<Product, any>> {
 export function remove(pId: string): Promise<AxiosResponse<string, any>> {
     return http.delete<string>("/product/remove/" + pId);
 }
+
+export function getById(pId: string): Promise<AxiosResponse<Product, any>> {
+    return http.get<Product>("/product/" + pId);
+}

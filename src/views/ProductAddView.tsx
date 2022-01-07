@@ -9,11 +9,7 @@ interface ComponentState {
     price: string
 }
 
-interface ComponentProps {
-    onProductAdded: (p: Product) => void;
-}
-
-export default class ProjectAddView extends React.Component<ComponentProps, ComponentState> {
+export default class ProjectAddView extends React.Component<any, ComponentState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -34,7 +30,6 @@ export default class ProjectAddView extends React.Component<ComponentProps, Comp
             price: this.state.price.replaceAll(".", "").replaceAll(",", "")
         };
         await create(product);
-        this.props.onProductAdded(product);
     }
 
     handleChange(e: any) {

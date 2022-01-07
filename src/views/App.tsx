@@ -1,15 +1,15 @@
 import React from 'react';
 import '../css/App.css';
-import { BrowserRouter as Router, Route, Link, RouteComponentProps } from "react-router-dom";
+import { Route, Link, RouteComponentProps, Switch } from "react-router-dom";
 import HomeView from './HomeView';
+import NotFoundView from './NotFoundView';
 import ProductListView from './ProductListView';
 import ProductView from './ProductView';
 import ProductAddView from './ProductAddView';
-import LoadingData, { LoadState } from '../models/LoadingData';
+import LoadingDataState, { LoadState } from '../models/LoadingData';
 import ProductList from '../models/ProductList';
-import { getAll } from '../productService';
 
-interface AppState extends LoadingData<ProductList> {
+interface AppState extends LoadingDataState<ProductList> {
     cart: Map<string, number>;
 }
 
@@ -22,28 +22,6 @@ export default class App extends React.Component<any, AppState> {
             loadState: LoadState.LOADING,
             cart: new Map<string, number>()
         };
-    }
-
-    async componentDidMount() {
-        this.fetchProduct();
-    }
-
-    async fetchProduct() {
-        try {
-            const res = await getAll();
-            const plist: ProductList = new ProductList();
-            plist.push(...res.data);
-            this.setState({
-                data: plist,
-                loadState: LoadState.SUCCESS
-            });
-            this.removeUnavailableProductFromCart();
-        } catch (ex) {
-            console.error(ex);
-            this.setState({
-                loadState: LoadState.ERROR
-            });
-        }
     }
 
     removeUnavailableProductFromCart() {
@@ -91,7 +69,7 @@ export default class App extends React.Component<any, AppState> {
     render() {
         return (
 
-            <Router>
+            <div>
                 <header>
                     <nav>
                         <Link to="/">Home</Link>
@@ -100,32 +78,19 @@ export default class App extends React.Component<any, AppState> {
                     </nav>
                 </header>
                 <div id="main">
-
-                    <Route path="/" exact component={HomeView} />
-                    <Route path="/products" exact component={() => {
-                        return <ProductListView
-                            loadState={this.state.loadState}
-                            data={this.state.data}
-                            onProductAddToCart={(id: string) => this.addToCart(id)} />
-                    }} />
-                    <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
-                        return <ProductView
-                            loadState={this.state.loadState}
-                            data={this.state.data?.getProductById(routeComponent.match.params.id)}
-                            onProductAddToCart={(id: string) => this.addToCart(id)}
-                            onProductRemove={async () => await this.fetchProduct()} />
-                    }} />
-                    <Route path="/addproduct/" component={(routeComponent: RouteComponentProps<any>) => {
-                        return <ProductAddView onProductAdded={() => this.fetchProduct()} />
-                    }} />
-                    {/*
-                    <button onClick={() => this.fetchProduct()}>SUCCESS</button>
-                    <button onClick={() => this.setState({ loadState: LoadState.ERROR })}>ERROR</button>
-                    <button onClick={() => this.setState({ loadState: LoadState.SUCCESS, data: new ProductList() })}>No products</button>
-                    <button onClick={() => this.setState({ loadState: LoadState.LOADING })}>reset</button>
-                    */}
+                    <Switch>
+                        <Route path="/" exact component={HomeView} />
+                        <Route path="/products" component={() => {
+                            return <ProductListView onProductAddToCart={(id: string) => this.addToCart(id)} />
+                        }} />
+                        <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
+                            return <ProductView productId={routeComponent.match.params.id} />
+                        }} />
+                        <Route path="/addproduct/" component={ProductAddView} />
+                        <Route component={NotFoundView} />
+                    </Switch>
                 </div >
-            </Router >
+            </div >
         );
     }
 };

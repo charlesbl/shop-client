@@ -1,4 +1,4 @@
-export default interface LoadingData<T> {
+export default interface LoadingDataState<T> {
     loadState: LoadState;
     data: T | undefined;
 }

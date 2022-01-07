@@ -1,12 +1,57 @@
 import { Link } from "react-router-dom";
 import Product from "../models/Product";
 import ProductList from "../models/ProductList";
-import LoadingComponent from "../components/LoadingComponent";
 import "../css/ProductList.css"
-import CartProps from "../models/CartProps";
-import { regexPrice } from "../utils";
+import { getLocalData, regexPrice, setLocalData } from "../utils";
+import LoadingDataState, { LoadState } from "../models/LoadingData";
+import { getAll } from "../productService";
+import React from "react";
 
-export default class ProductListView extends LoadingComponent<ProductList, CartProps, any> {
+const LOCALSTORAGE_DATA_KEY = "product_list";
+
+export default class ProductListView extends React.Component<any, LoadingDataState<ProductList>> {
+    private _isMounted: boolean;
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            loadState: LoadState.LOADING,
+            data: getLocalData(LOCALSTORAGE_DATA_KEY)
+        }
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    async componentDidMount() {
+        const plist = await this.fetchProduct();
+        if (this._isMounted && plist) {
+            this.setState({
+                data: plist,
+                loadState: LoadState.SUCCESS
+            });
+            setLocalData<ProductList>(LOCALSTORAGE_DATA_KEY, plist);
+        }
+    }
+
+    async fetchProduct(): Promise<ProductList | undefined> {
+        try {
+            const res = await getAll();
+            const plist: ProductList = new ProductList();
+            plist.push(...res.data);
+            return plist;
+        } catch (ex) {
+            console.error(ex);
+            this.setState({
+                loadState: LoadState.ERROR
+            });
+            return undefined;
+        }
+    }
+
     renderProduct(product: Product) {
         const errorPrice: boolean = !regexPrice.test(product.price);
         const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
@@ -22,10 +67,11 @@ export default class ProductListView extends LoadingComponent<ProductList, CartP
         );
     }
 
-    renderSuccess(products: ProductList) {
+    render() {
         return (
             <div id="product-list">
-                {products.map((product: Product) => this.renderProduct(product))}
+                {this.state.loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
+                {this.state.data?.map((product: Product) => this.renderProduct(product))}
             </div>
         );
     }
