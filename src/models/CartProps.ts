@@ -1,3 +1,3 @@
 export default interface CartProps {
-    onAddToCart: (id: string) => void;
+    onProductAddToCart: (id: string) => void;
 }

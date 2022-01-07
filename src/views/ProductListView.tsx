@@ -4,15 +4,18 @@ import ProductList from "../models/ProductList";
 import LoadingComponent from "../components/LoadingComponent";
 import "../css/ProductList.css"
 import CartProps from "../models/CartProps";
+import { regexPrice } from "../utils";
 
-export default class ProductListView extends LoadingComponent<ProductList, CartProps> {
+export default class ProductListView extends LoadingComponent<ProductList, CartProps, any> {
     renderProduct(product: Product) {
+        const errorPrice: boolean = !regexPrice.test(product.price);
+        const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
         return (
             <div key={product.id} className="short-product">
                 <h2 className="name"><Link to={"/product/" + product.id}>{product.name}</Link></h2>
-                <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempus, ipsum ut tempor porttitor, sapien arcu ullamcorper velit, quis lobortis sem ligula ut enim. In hac habitasse platea dictumst. Vivamus placerat elit id vulputate bibendum. Nunc cursus dolor nec nibh scelerisque, non sodales lacus cursus. Suspendisse quis dapibus risus, et ultrices risus.</p>
+                <p className="description">{product.desc}</p>
                 <div>
-                    <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
+                    {priceDiv}
                     <button>Buy</button>
                 </div>
             </div>

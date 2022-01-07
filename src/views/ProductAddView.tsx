@@ -1,6 +1,7 @@
 import React from "react";
 import Product from "../models/Product";
 import { create } from "../productService";
+import { regexPrice } from "../utils";
 
 interface ComponentState {
     name: string,
@@ -8,9 +9,11 @@ interface ComponentState {
     price: string
 }
 
-const regexPrice = /^\d+(.\d{1,2})?$/;
+interface ComponentProps {
+    onProductAdded: (p: Product) => void;
+}
 
-export default class ProjectAddView extends React.Component<any, ComponentState> {
+export default class ProjectAddView extends React.Component<ComponentProps, ComponentState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -28,10 +31,10 @@ export default class ProjectAddView extends React.Component<any, ComponentState>
             id: "",
             name: this.state.name,
             desc: this.state.desc,
-            price: this.state.price
+            price: this.state.price.replaceAll(".", "").replaceAll(",", "")
         };
-
         await create(product);
+        this.props.onProductAdded(product);
     }
 
     handleChange(e: any) {

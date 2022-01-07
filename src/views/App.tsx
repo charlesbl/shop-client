@@ -29,31 +29,32 @@ export default class App extends React.Component<any, AppState> {
     }
 
     async fetchProduct() {
-        let success;
-        getAll().then((res) => {
+        try {
+            const res = await getAll();
+            const plist: ProductList = new ProductList();
+            plist.push(...res.data);
             this.setState({
-                data: res.data,
+                data: plist,
                 loadState: LoadState.SUCCESS
             });
-            success = true;
-        }).catch((ex) => {
+            this.removeUnavailableProductFromCart();
+        } catch (ex) {
             console.error(ex);
             this.setState({
                 loadState: LoadState.ERROR
             });
-            success = false;
-        });
-
-        if (success) {
-            //Verify if all product in cart are available
-            Array.from(this.state.cart.keys()).forEach((id: string) => {
-                if (this.state.data) {
-                    if (!this.state.data.getProductById(id)) {
-                        this.removeAllFromCart(id);
-                    }
-                }
-            });
         }
+    }
+
+    removeUnavailableProductFromCart() {
+        //Verify if all product in cart are available
+        Array.from(this.state.cart.keys()).forEach((id: string) => {
+            if (this.state.data) {
+                if (!this.state.data.getProductById(id)) {
+                    this.removeAllFromCart(id);
+                }
+            }
+        });
     }
 
     removeAllFromCart(id: string) {
@@ -105,16 +106,17 @@ export default class App extends React.Component<any, AppState> {
                         return <ProductListView
                             loadState={this.state.loadState}
                             data={this.state.data}
-                            onAddToCart={(id: string) => this.addToCart(id)} />
+                            onProductAddToCart={(id: string) => this.addToCart(id)} />
                     }} />
                     <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
                         return <ProductView
                             loadState={this.state.loadState}
                             data={this.state.data?.getProductById(routeComponent.match.params.id)}
-                            onAddToCart={(id: string) => this.addToCart(id)} />
+                            onProductAddToCart={(id: string) => this.addToCart(id)}
+                            onProductRemove={async () => await this.fetchProduct()} />
                     }} />
                     <Route path="/addproduct/" component={(routeComponent: RouteComponentProps<any>) => {
-                        return <ProductAddView />
+                        return <ProductAddView onProductAdded={() => this.fetchProduct()} />
                     }} />
                     {/*
                     <button onClick={() => this.fetchProduct()}>SUCCESS</button>
