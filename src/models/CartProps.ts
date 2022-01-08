@@ -1,3 +1,5 @@
+import Cart from "./Cart";
+
 export default interface CartProps {
-    onProductAddToCart: (id: string) => void;
+    getCart: () => Cart;
 }

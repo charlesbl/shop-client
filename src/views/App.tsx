@@ -6,63 +6,20 @@ import NotFoundView from './NotFoundView';
 import ProductListView from './ProductListView';
 import ProductView from './ProductView';
 import ProductAddView from './ProductAddView';
-import LoadingDataState, { LoadState } from '../models/LoadingData';
-import ProductList from '../models/ProductList';
+import CartView from './CartView';
+import Cart from '../models/Cart';
 
-interface AppState extends LoadingDataState<ProductList> {
-    cart: Map<string, number>;
-}
-
-export default class App extends React.Component<any, AppState> {
+export default class App extends React.Component {
+    private cart: Cart;
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            data: undefined,
-            loadState: LoadState.LOADING,
-            cart: new Map<string, number>()
-        };
+        this.cart = new Cart();
+        this.addProductAndUpdateCart = this.addProductAndUpdateCart.bind(this);
     }
 
-    removeUnavailableProductFromCart() {
-        //Verify if all product in cart are available
-        Array.from(this.state.cart.keys()).forEach((id: string) => {
-            if (this.state.data) {
-                if (!this.state.data.getProductById(id)) {
-                    this.removeAllFromCart(id);
-                }
-            }
-        });
-    }
-
-    removeAllFromCart(id: string) {
-        let newCard = this.state.cart;
-        newCard.delete(id);
-        this.setState({
-            cart: newCard
-        });
-    }
-
-    removeFromCart(id: string, count: number = 1) {
-        let oldValue = this.state.cart.get(id);
-        if (!oldValue) { return; }
-        if (oldValue <= count) {
-            this.removeAllFromCart(id);
-        }
-        let newCart = this.state.cart.set(id, oldValue - count);
-        this.setState({
-            cart: newCart
-        });
-    }
-
-    addToCart(id: string, count: number = 1) {
-        let oldValue = this.state.cart.get(id);
-        if (!oldValue)
-            oldValue = 0;
-        let newCart = this.state.cart.set(id, oldValue + count);
-        this.setState({
-            cart: newCart
-        });
+    addProductAndUpdateCart(productId: string) {
+        this.cart.addToCart(productId);
     }
 
 
@@ -75,18 +32,22 @@ export default class App extends React.Component<any, AppState> {
                         <Link to="/">Home</Link>
                         <Link to="/products">All Products</Link>
                         <Link to="/addproduct">Add Product</Link>
+                        <Link to="/cart">Cart</Link>
                     </nav>
                 </header>
                 <div id="main">
                     <Switch>
                         <Route path="/" exact component={HomeView} />
                         <Route path="/products" component={() => {
-                            return <ProductListView onProductAddToCart={(id: string) => this.addToCart(id)} />
+                            return <ProductListView getCart={() => this.cart} />
                         }} />
                         <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
-                            return <ProductView productId={routeComponent.match.params.id} />
+                            return <ProductView productId={routeComponent.match.params.id} getCart={() => this.cart} />
                         }} />
                         <Route path="/addproduct/" component={ProductAddView} />
+                        <Route path="/cart/" component={() => {
+                            return <CartView getCart={() => this.cart} />
+                        }} />
                         <Route component={NotFoundView} />
                     </Switch>
                 </div >

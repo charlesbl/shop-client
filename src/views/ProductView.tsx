@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import LoadingDataState, { LoadState } from "../models/LoadingData";
 import React from "react";
 import { getLocalData, setLocalData } from "../utils";
+import CartProps from "../models/CartProps";
 
 enum DISPLAY_STATES {
     DISPLAY,
@@ -16,7 +17,7 @@ interface ComponentState extends LoadingDataState<Product> {
     displayState: DISPLAY_STATES;
 }
 
-interface ComponentProps {
+interface ComponentProps extends CartProps {
     productId: string;
 }
 
@@ -89,7 +90,7 @@ export default class ProductView extends React.Component<ComponentProps, Compone
         return (
             <div>
                 <div>{p.id} {p.name} {p.desc} {p.price}</div>
-                {/* <button onClick={() => this.props.onProductAddToCart(p.id)}>Add to cart</button> */}
+                <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button>
                 <button onClick={() => this.removeProduct(p)} disabled={this.state.loadState !== LoadState.SUCCESS}>Remove from database</button>
             </div>
         );

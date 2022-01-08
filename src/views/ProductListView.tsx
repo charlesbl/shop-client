@@ -6,10 +6,11 @@ import { getLocalData, regexPrice, setLocalData } from "../utils";
 import LoadingDataState, { LoadState } from "../models/LoadingData";
 import { getAll } from "../productService";
 import React from "react";
+import CartProps from "../models/CartProps";
 
 const LOCALSTORAGE_DATA_KEY = "product_list";
 
-export default class ProductListView extends React.Component<any, LoadingDataState<ProductList>> {
+export default class ProductListView extends React.Component<CartProps, LoadingDataState<ProductList>> {
     private _isMounted: boolean;
 
     constructor(props: any) {
@@ -61,7 +62,7 @@ export default class ProductListView extends React.Component<any, LoadingDataSta
                 <p className="description">{product.desc}</p>
                 <div>
                     {priceDiv}
-                    <button>Buy</button>
+                    <button onClick={() => this.props.getCart().addToCart(product.id)}>Buy</button>
                 </div>
             </div>
         );
