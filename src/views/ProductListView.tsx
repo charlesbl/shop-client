@@ -23,10 +23,6 @@ export default class ProductListView extends React.Component<CartProps, LoadingD
         this._isMounted = true;
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     async componentDidMount() {
         const plist = await this.fetchProduct();
         if (this._isMounted && plist) {
@@ -36,6 +32,15 @@ export default class ProductListView extends React.Component<CartProps, LoadingD
             });
             setLocalData<ProductList>(LOCALSTORAGE_DATA_KEY, plist);
         }
+
+        this.props.getCart().setOnCartUpdate(() => {
+            this.setState({});
+        });
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        this.props.getCart().setOnCartUpdate(() => { });
     }
 
     async fetchProduct(): Promise<ProductList | undefined> {
@@ -58,11 +63,13 @@ export default class ProductListView extends React.Component<CartProps, LoadingD
         const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
         return (
             <div key={product.id} className="short-product">
+                {this.state.loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
                 <h2 className="name"><Link to={"/product/" + product.id}>{product.name}</Link></h2>
                 <p className="description">{product.desc}</p>
                 <div>
                     {priceDiv}
                     <button onClick={() => this.props.getCart().addToCart(product.id)}>Buy</button>
+                    {this.props.getCart().getProductQuantity(product.id)}
                 </div>
             </div>
         );
@@ -70,8 +77,7 @@ export default class ProductListView extends React.Component<CartProps, LoadingD
 
     render() {
         return (
-            <div id="product-list">
-                {this.state.loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
+            <div id="product-list" className={this.state.loadState === LoadState.LOADING ? "loading" : "loading"}>
                 {this.state.data?.map((product: Product) => this.renderProduct(product))}
             </div>
         );

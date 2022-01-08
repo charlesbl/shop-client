@@ -59,6 +59,10 @@ export default class Cart {
         // });
     }
 
+    getProductQuantity(productId: string): number | undefined {
+        return this.productQuantityMap.get(productId);
+    }
+
     getEntries(): [string, number][] {
         return Array.from(this.productQuantityMap.entries());
     }
