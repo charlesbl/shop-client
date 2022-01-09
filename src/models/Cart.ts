@@ -1,37 +1,43 @@
+import { Dispatch, SetStateAction } from 'react';
 import ProductList from '../models/ProductList';
 
 export default class Cart {
     private productQuantityMap: Map<string, number>;
-    private onCartUpdate: () => void;
+    private dispatch?: Dispatch<SetStateAction<Cart>>;
 
-    constructor() {
-        this.productQuantityMap = new Map<string, number>();
-        this.onCartUpdate = () => { };
+    constructor(cart: Cart | undefined = undefined) {
+        if (cart)
+            this.productQuantityMap = cart.productQuantityMap;
+        else
+            this.productQuantityMap = new Map<string, number>();
     }
 
-    setOnCartUpdate(f: () => void) {
-        this.onCartUpdate = f;
+    updateContext() {
+        if (this.dispatch)
+            this.dispatch(new Cart(this));
     }
 
-    addToCart(id: string, count: number = 1) {
+    setDispatch(dispatch: Dispatch<SetStateAction<Cart>>) {
+        this.dispatch = dispatch
+    }
+
+    addToCart(id: string, count = 1) {
         let currentQuantity = this.productQuantityMap.get(id);
         if (!currentQuantity)
             currentQuantity = 0;
         this.productQuantityMap.set(id, currentQuantity + count);
-        this.onCartUpdate();
-
-        console.log(this.productQuantityMap);
+        this.updateContext();
     }
 
     /** Remove all quantity of a Product */
     removeProduct(id: string): boolean {
         const result = this.productQuantityMap.delete(id);
-        this.onCartUpdate();
+        this.updateContext();
         return result;
     }
 
     /** Remove a limited quantity of a Product */
-    removeAmountFromCart(id: string, count: number = 1) {
+    removeAmountFromCart(id: string, count = 1) {
         const currentQuantity = this.productQuantityMap.get(id);
         if (!currentQuantity) {
             //Product not in cart
@@ -43,7 +49,7 @@ export default class Cart {
         } else {
             this.productQuantityMap.set(id, newQuantity);
         }
-        this.onCartUpdate();
+        this.updateContext();
     }
 
     removeUnavailableProductFromCart(productList: ProductList) {
@@ -51,7 +57,7 @@ export default class Cart {
             .filter((productId) => !productList.getProductById(productId))
             .forEach((productId) => this.removeProduct(productId));
 
-        this.onCartUpdate();
+        this.updateContext();
         // Array.from(this.keys()).forEach((id: string) => {
         //     if (!productList.getProductById(id)) {
         //         this.removeAllFromCart(id);

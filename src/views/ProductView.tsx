@@ -1,6 +1,6 @@
 import Product from "../models/Product";
 import { getById, remove } from "../productService";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import LoadingDataState, { LoadState } from "../models/LoadingData";
 import React from "react";
 import { getLocalData, setLocalData } from "../utils";
@@ -90,7 +90,7 @@ export default class ProductView extends React.Component<ComponentProps, Compone
         return (
             <div>
                 <div>{p.id} {p.name} {p.desc} {p.price}</div>
-                <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button>
+                {/* <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button> */}
                 <button onClick={() => this.removeProduct(p)} disabled={this.state.loadState !== LoadState.SUCCESS}>Remove from database</button>
             </div>
         );
@@ -99,7 +99,7 @@ export default class ProductView extends React.Component<ComponentProps, Compone
     render() {
         if (this.state.displayState === DISPLAY_STATES.REDIRECT) {
             return (
-                <Redirect to="/products" />
+                <Navigate to="/products" />
             );
         }
         if (this.state.displayState === DISPLAY_STATES.REMOVED) {

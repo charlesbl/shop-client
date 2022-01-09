@@ -23,7 +23,7 @@ export default class ProjectAddView extends React.Component<any, ComponentState>
     async handleSubmit(e: React.SyntheticEvent) {
         e.preventDefault();
 
-        let product: Product = {
+        const product: Product = {
             id: "",
             name: this.state.name,
             desc: this.state.desc,
@@ -32,7 +32,7 @@ export default class ProjectAddView extends React.Component<any, ComponentState>
         await create(product);
     }
 
-    handleChange(e: any) {
+    handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ [e.target.name]: e.target.value } as Pick<ComponentState, any>);
         this.verifyForm();
     }

@@ -1,31 +1,14 @@
-import React from 'react';
 import '../css/App.css';
-import { Route, Link, RouteComponentProps, Switch } from "react-router-dom";
 import HomeView from './HomeView';
 import NotFoundView from './NotFoundView';
 import ProductListView from './ProductListView';
-import ProductView from './ProductView';
 import ProductAddView from './ProductAddView';
-import CartView from './CartView';
-import Cart from '../models/Cart';
+import { Link, Route, Routes } from 'react-router-dom';
+import CartProvider from '../contexts/CartProvider';
 
-export default class App extends React.Component {
-    private cart: Cart;
-
-    constructor(props: any) {
-        super(props);
-        this.cart = new Cart();
-        this.addProductAndUpdateCart = this.addProductAndUpdateCart.bind(this);
-    }
-
-    addProductAndUpdateCart(productId: string) {
-        this.cart.addToCart(productId);
-    }
-
-
-    render() {
-        return (
-
+const App = () => {
+    return (
+        <CartProvider>
             <div>
                 <header>
                     <nav>
@@ -36,22 +19,21 @@ export default class App extends React.Component {
                     </nav>
                 </header>
                 <div id="main">
-                    <Switch>
-                        <Route path="/" exact component={HomeView} />
-                        <Route path="/products" component={() => {
-                            return <ProductListView getCart={() => this.cart} />
-                        }} />
-                        <Route path="/product/:id" component={(routeComponent: RouteComponentProps<any>) => {
-                            return <ProductView productId={routeComponent.match.params.id} getCart={() => this.cart} />
-                        }} />
-                        <Route path="/addproduct/" component={ProductAddView} />
-                        <Route path="/cart/" component={() => {
-                            return <CartView getCart={() => this.cart} />
-                        }} />
-                        <Route component={NotFoundView} />
-                    </Switch>
+                    <Routes>
+                        <Route path="/" element={<HomeView />} />
+                        <Route path="/products" element={<ProductListView />} />
+                        {/* <Route path="/product/:id" element={() => {
+                        return <ProductView getCart={() => this.cart} />
+                    }} /> */}
+                        <Route path="/addproduct/" element={<ProductAddView />} />
+                        {/* <Route path="/cart/" element={() => {
+                        return <CartView getCart={() => this.cart} />
+                    }} /> */}
+                        <Route path="*" element={<NotFoundView />} />
+                    </Routes>
                 </div >
             </div >
-        );
-    }
-};
+        </CartProvider>
+    );
+}
+export default App;

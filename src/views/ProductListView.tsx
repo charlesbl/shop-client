@@ -2,84 +2,57 @@ import { Link } from "react-router-dom";
 import Product from "../models/Product";
 import ProductList from "../models/ProductList";
 import "../css/ProductList.css"
-import { getLocalData, regexPrice, setLocalData } from "../utils";
-import LoadingDataState, { LoadState } from "../models/LoadingData";
+import { getLocalData, regexPrice } from "../utils";
+import { LoadState } from "../models/LoadingData";
 import { getAll } from "../productService";
-import React from "react";
-import CartProps from "../models/CartProps";
+import React, { useEffect, useState } from "react";
+import Cart from "../models/Cart";
+import { useCart } from "../contexts/CartProvider";
 
+//TODO
 const LOCALSTORAGE_DATA_KEY = "product_list";
 
-export default class ProductListView extends React.Component<CartProps, LoadingDataState<ProductList>> {
-    private _isMounted: boolean;
+const ProductListView: React.FC = () => {
+    const [status, setStatus] = useState(LoadState.LOADING);
+    const [products, setProducts] = useState(getLocalData<ProductList>(LOCALSTORAGE_DATA_KEY));
+    const cart = useCart();
 
-    constructor(props: any) {
-        super(props);
+    useEffect(() => {
+        setStatus(LoadState.LOADING);
 
-        this.state = {
-            loadState: LoadState.LOADING,
-            data: getLocalData(LOCALSTORAGE_DATA_KEY)
-        }
-        this._isMounted = true;
-    }
-
-    async componentDidMount() {
-        const plist = await this.fetchProduct();
-        if (this._isMounted && plist) {
-            this.setState({
-                data: plist,
-                loadState: LoadState.SUCCESS
-            });
-            setLocalData<ProductList>(LOCALSTORAGE_DATA_KEY, plist);
-        }
-
-        this.props.getCart().setOnCartUpdate(() => {
-            this.setState({});
-        });
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-        this.props.getCart().setOnCartUpdate(() => { });
-    }
-
-    async fetchProduct(): Promise<ProductList | undefined> {
-        try {
-            const res = await getAll();
-            const plist: ProductList = new ProductList();
+        getAll().then(res => {
+            const plist = new ProductList();
             plist.push(...res.data);
-            return plist;
-        } catch (ex) {
-            console.error(ex);
-            this.setState({
-                loadState: LoadState.ERROR
-            });
-            return undefined;
-        }
+            setProducts(plist);
+            setStatus(LoadState.SUCCESS);
+        }).catch(() => setStatus(LoadState.ERROR));
+    }, []);
+
+    const buyHandler = (ProductId: string) => {
+        cart.addToCart(ProductId);
     }
 
-    renderProduct(product: Product) {
-        const errorPrice: boolean = !regexPrice.test(product.price);
+    const renderProduct = (product: Product, cart: Cart) => {
+        const errorPrice = !regexPrice.test(product.price);
         const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
         return (
             <div key={product.id} className="short-product">
-                {this.state.loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
-                <h2 className="name"><Link to={"/product/" + product.id}>{product.name}</Link></h2>
+                <h2 className="name"><Link to={`product/${product.id}`}>{product.name}</Link></h2>
                 <p className="description">{product.desc}</p>
                 <div>
                     {priceDiv}
-                    <button onClick={() => this.props.getCart().addToCart(product.id)}>Buy</button>
-                    {this.props.getCart().getProductQuantity(product.id)}
+                    <button onClick={() => buyHandler(product.id)}>Buy</button>
+                    {cart.getProductQuantity(product.id)}
                 </div>
             </div>
         );
     }
 
-    render() {
-        return (
-            <div id="product-list" className={this.state.loadState === LoadState.LOADING ? "loading" : "loading"}>
-                {this.state.data?.map((product: Product) => this.renderProduct(product))}
-            </div>
-        );
-    }
+    return (
+        <div id="product-list" className={status === LoadState.LOADING ? "loading" : ""} >
+            {status === LoadState.LOADING ? <div>Loading...</div> : ""}
+            {products?.map((product: Product) => renderProduct(product, cart))}
+        </div>
+    );
 }
+export default ProductListView;

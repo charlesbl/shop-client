@@ -58,9 +58,9 @@ export default class CartEntryComponent extends React.Component<ComponentProps, 
                     {this.state.loadState === LoadState.SUCCESS ? this.state.data?.name : this.props.productId}
                 </div>
                 <div>
-                    <button onClick={() => this.props.getCart().removeAmountFromCart(this.props.productId)}>-</button>
+                    {/* <button onClick={() => this.props.getCart().removeAmountFromCart(this.props.productId)}>-</button>
                     <div>{this.props.quantity}</div>
-                    <button onClick={() => this.props.getCart().addToCart(this.props.productId)}>+</button>
+                    <button onClick={() => this.props.getCart().addToCart(this.props.productId)}>+</button> */}
                 </div>
             </div>
         );
