@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Product from "../models/Product";
 import productService from "../productService";
-import { regexPrice } from "../utils";
+import { regexPrice, useIsMounted } from "../utils";
 
 interface ComponentState {
     name: string,
@@ -9,54 +9,66 @@ interface ComponentState {
     price: string
 }
 
-export default class ProjectAddView extends React.Component<any, ComponentState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            name: "product name",
-            desc: "description",
-            price: "30"
-        };
-        this.verifyForm();
-    }
+const ProjectAddView = () => {
+    const [state, setState] = useState({
+        name: "Product name",
+        desc: "Description",
+        price: "20.00"
+    } as ComponentState);
+    const [actionText, setActionText] = useState<string | undefined>(undefined);
+    const isMounted = useIsMounted();
 
-    async handleSubmit(e: React.SyntheticEvent) {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
         const product: Product = {
             id: "",
-            name: this.state.name,
-            desc: this.state.desc,
-            price: this.state.price.replaceAll(".", "").replaceAll(",", "")
+            name: state.name,
+            desc: state.desc,
+            price: state.price.replaceAll(".", "").replaceAll(",", "")
         };
+
+        setActionText("Adding...");
         await productService.create(product);
+        if (!isMounted)
+            return;
+        setActionText("Added !");
+        setTimeout(() => {
+            if (isMounted)
+                setActionText(undefined);
+        }, 1000);
     }
 
-    handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ [e.target.name]: e.target.value } as Pick<ComponentState, any>);
-        this.verifyForm();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newState = { ...state, [e.target.name]: e.target.value } as ComponentState;
+        setState(newState);
     }
 
-    verifyForm(): boolean {
-        return regexPrice.test(this.state.price);
+
+    const verifyForm = () => {
+        return regexPrice.test(state.price);
     }
 
-    render() {
-        return (
-            <form id="Add" onSubmit={(e) => this.handleSubmit(e)}>
+    return (
+        <form id="Add" onSubmit={handleSubmit}>
+            <div>
+                Name: <input type="text" name="name" value={state.name} onChange={handleChange}></input>
+            </div>
+            <div>
+                Description: <input type="text" name="desc" value={state.desc} onChange={handleChange}></input>
+            </div>
+            <div>
+                Price: <input type="text" name="price" value={state.price} onChange={handleChange}></input>
+            </div>
+            <div>
+                <input type="submit" value="Add product" disabled={!verifyForm() || actionText !== undefined} />
+            </div>
+            {actionText !== undefined ?
                 <div>
-                    Name: <input type="text" name="name" value={this.state.name} onChange={(e) => this.handleChange(e)}></input>
-                </div>
-                <div>
-                    Description: <input type="text" name="desc" value={this.state.desc} onChange={(e) => this.handleChange(e)}></input>
-                </div>
-                <div>
-                    Price: <input type="text" name="price" value={this.state.price} onChange={(e) => this.handleChange(e)}></input>
-                </div>
-                <div>
-                    <input type="submit" value="Add product" disabled={!this.verifyForm()} />
-                </div>
-            </form>
-        );
-    }
+                    {actionText}
+                </div> : ""}
+        </form>
+    );
 }
+export default ProjectAddView;

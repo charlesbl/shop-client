@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import Product from "./models/Product";
 
 const http = axios.create({
@@ -24,9 +24,11 @@ const getById = (pId: string) => {
     return http.get<Product>("/product/" + pId);
 }
 
-export default {
+const productService = {
     getAll,
     create,
     remove,
     getById
-}
+};
+
+export default productService;
