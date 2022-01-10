@@ -5,6 +5,8 @@ import ProductListView from './ProductListView';
 import ProductAddView from './ProductAddView';
 import { Link, Route, Routes } from 'react-router-dom';
 import CartProvider from '../contexts/CartProvider';
+import ProductView from './ProductView';
+import CartView from './CartView';
 
 const App = () => {
     return (
@@ -22,13 +24,9 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<HomeView />} />
                         <Route path="/products" element={<ProductListView />} />
-                        {/* <Route path="/product/:id" element={() => {
-                        return <ProductView getCart={() => this.cart} />
-                    }} /> */}
+                        <Route path="/product/:productId" element={<ProductView />} />
                         <Route path="/addproduct/" element={<ProductAddView />} />
-                        {/* <Route path="/cart/" element={() => {
-                        return <CartView getCart={() => this.cart} />
-                    }} /> */}
+                        <Route path="/cart/" element={<CartView />} />
                         <Route path="*" element={<NotFoundView />} />
                     </Routes>
                 </div >

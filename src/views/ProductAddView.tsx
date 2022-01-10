@@ -1,6 +1,6 @@
 import React from "react";
 import Product from "../models/Product";
-import { create } from "../productService";
+import productService from "../productService";
 import { regexPrice } from "../utils";
 
 interface ComponentState {
@@ -29,7 +29,7 @@ export default class ProjectAddView extends React.Component<any, ComponentState>
             desc: this.state.desc,
             price: this.state.price.replaceAll(".", "").replaceAll(",", "")
         };
-        await create(product);
+        await productService.create(product);
     }
 
     handleChange(e: React.ChangeEvent<HTMLInputElement>) {

@@ -1,10 +1,12 @@
 import Product from "../models/Product";
-import { getById, remove } from "../productService";
-import { Navigate } from "react-router-dom";
-import LoadingDataState, { LoadState } from "../models/LoadingData";
-import React from "react";
-import { getLocalData, setLocalData } from "../utils";
-import CartProps from "../models/CartProps";
+import { Navigate, useParams } from "react-router-dom";
+import LoadState from "../models/LoadingState";
+import React, { useEffect, useState } from "react";
+import { getLocalData, setLocalData, useIsMounted } from "../utils";
+import productService from "../productService";
+
+
+const LOCALSTORAGE_DATA_KEY = "product";
 
 enum DISPLAY_STATES {
     DISPLAY,
@@ -13,111 +15,70 @@ enum DISPLAY_STATES {
     REDIRECT
 }
 
-interface ComponentState extends LoadingDataState<Product> {
-    displayState: DISPLAY_STATES;
-}
-
-interface ComponentProps extends CartProps {
+interface ComponentParams {
     productId: string;
 }
 
-const LOCALSTORAGE_DATA_KEY = "product";
-export default class ProductView extends React.Component<ComponentProps, ComponentState> {
-    private _isMounted: boolean;
+const ProductView: React.FC = () => {
+    const { productId } = useParams<keyof ComponentParams>() as ComponentParams;
+    const [loadingState, setLoadingState] = useState(LoadState.LOADING);
+    const [displayState, setDisplayState] = useState(DISPLAY_STATES.DISPLAY);
+    const [product, setProduct] = useState(getLocalData<Product>(LOCALSTORAGE_DATA_KEY + productId));
 
-    constructor(props: ComponentProps) {
-        super(props);
+    const isMounted = useIsMounted();
 
-        this.state = {
-            loadState: LoadState.LOADING,
-            data: getLocalData(LOCALSTORAGE_DATA_KEY + props.productId),
-            displayState: DISPLAY_STATES.DISPLAY
-        }
-        this._isMounted = true;
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    async componentDidMount() {
-        const product = await this.fetchProduct();
-        if (product) {
-            if (this._isMounted) {
-                this.setState({
-                    data: product,
-                    loadState: LoadState.SUCCESS
-                });
-            }
-            setLocalData<Product>(LOCALSTORAGE_DATA_KEY + this.props.productId, product);
-        }
-    }
-
-    async fetchProduct(): Promise<Product | undefined> {
-        try {
-            const res = await getById(this.props.productId);
-            return res.data;
-        } catch (ex) {
-            console.error(ex);
-            this.setState({
-                loadState: LoadState.ERROR
-            });
-            return undefined;
-        }
-    }
-
-    removeProduct(p: Product) {
-        this.setState({
-            displayState: DISPLAY_STATES.REMOVING
-        });
-        remove(p.id).then((res) => {
-            if (!this._isMounted)
+    useEffect(() => {
+        setLoadingState(LoadState.LOADING);
+        productService.getById(productId).then(res => {
+            setLocalData(LOCALSTORAGE_DATA_KEY + productId, res.data);
+            if (!isMounted.current)
                 return;
-            this.setState({
-                displayState: DISPLAY_STATES.REMOVED
-            });
+            setProduct(res.data);
+            setLoadingState(LoadState.SUCCESS);
+        }).catch(() => setLoadingState(LoadState.ERROR));
+    }, [isMounted, productId]);
+
+    function removeProduct() {
+        if (!product) {
+            return;
+        }
+        productService.remove(product.id).then((res) => {
+            setDisplayState(DISPLAY_STATES.REMOVED);
             setTimeout(async () => {
-                if (!this._isMounted)
-                    return;
-                this.setState({
-                    displayState: DISPLAY_STATES.REDIRECT
-                });
+                setDisplayState(DISPLAY_STATES.REDIRECT);
             }, 1000);
         });
     }
 
-    renderSuccess(p: Product) {
+    if (displayState === DISPLAY_STATES.REDIRECT) {
         return (
-            <div>
-                <div>{p.id} {p.name} {p.desc} {p.price}</div>
-                {/* <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button> */}
-                <button onClick={() => this.removeProduct(p)} disabled={this.state.loadState !== LoadState.SUCCESS}>Remove from database</button>
-            </div>
+            <Navigate to="/products" />
+        );
+    }
+    if (displayState === DISPLAY_STATES.REMOVED) {
+        return (
+            <div>Removed</div>
+        );
+    }
+    if (displayState === DISPLAY_STATES.REMOVING) {
+        return (
+            <div>Removing...</div>
         );
     }
 
-    render() {
-        if (this.state.displayState === DISPLAY_STATES.REDIRECT) {
-            return (
-                <Navigate to="/products" />
-            );
-        }
-        if (this.state.displayState === DISPLAY_STATES.REMOVED) {
-            return (
-                <div>Removed</div>
-            );
-        }
-        if (this.state.displayState === DISPLAY_STATES.REMOVING) {
-            return (
-                <div>Removing...</div>
-            );
-        }
-        if (this.state.data) {
-            return this.renderSuccess(this.state.data);
-        } else {
-            return (
-                <div>loading...</div>
-            );
-        }
-    }
+    const ProductDiv = product ?
+        <div>
+            <div>{product.id} {product.name} {product.desc} {product.price}</div>
+            {/* <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button> */}
+            <button onClick={removeProduct} disabled={loadingState !== LoadState.SUCCESS}>Remove from database</button>
+        </div> : undefined;
+
+    return (
+        <div>
+            {loadingState === LoadState.LOADING ? <div>Loading...</div> : ""}
+            {loadingState === LoadState.ERROR ? <div>Error</div> : ""}
+            {ProductDiv}
+        </div>
+    );
 }
+export default ProductView;

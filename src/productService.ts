@@ -8,18 +8,25 @@ const http = axios.create({
     }
 });
 
-export function getAll(): Promise<AxiosResponse<Array<Product>, any>> {
+const getAll = () => {
     return http.get<Array<Product>>("/products");
 }
 
-export function create(data: Product): Promise<AxiosResponse<Product, any>> {
+const create = (data: Product) => {
     return http.post<Product>("/product/add", data);
 }
 
-export function remove(pId: string): Promise<AxiosResponse<string, any>> {
+const remove = (pId: string) => {
     return http.delete<string>("/product/remove/" + pId);
 }
 
-export function getById(pId: string): Promise<AxiosResponse<Product, any>> {
+const getById = (pId: string) => {
     return http.get<Product>("/product/" + pId);
+}
+
+export default {
+    getAll,
+    create,
+    remove,
+    getById
 }
