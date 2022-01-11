@@ -3,24 +3,22 @@ import { useCart } from "../contexts/CartProvider";
 import LoadState from "../models/LoadingState";
 import Product from "../models/Product";
 import productService from "../productService";
-import { useIsMounted, setLocalData, getLocalData } from "../utils";
+import { useIsMounted } from "../utils";
 
 interface ComponentProps {
     productId: string,
     quantity: number
 }
-const LOCALSTORAGE_DATA_KEY = "product";
 
 const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => {
     const isMounted = useIsMounted();
     const [loadingState, setLoadingState] = useState(LoadState.LOADING);
-    const [product, setProduct] = useState(getLocalData<Product>(LOCALSTORAGE_DATA_KEY + props.productId));
+    const [product, setProduct] = useState<Product>();
     const cart = useCart();
 
     useEffect(() => {
         setLoadingState(LoadState.LOADING);
         productService.getById(props.productId).then(res => {
-            setLocalData(LOCALSTORAGE_DATA_KEY + props.productId, res.data);
             if (!isMounted.current)
                 return;
             setProduct(res.data);

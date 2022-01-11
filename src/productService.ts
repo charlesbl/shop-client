@@ -1,11 +1,17 @@
 import axios from "axios";
+import { setupCache } from "axios-cache-adapter";
 import Product from "./models/Product";
+
+const cache = setupCache({
+    maxAge: 10 * 60 * 1000
+});
 
 const http = axios.create({
     baseURL: "http://localhost:3001/",
     headers: {
         "Content-type": "application/json"
-    }
+    },
+    adapter: cache.adapter
 });
 
 const getAll = () => {

@@ -2,11 +2,8 @@ import Product from "../models/Product";
 import { Navigate, useParams } from "react-router-dom";
 import LoadState from "../models/LoadingState";
 import React, { useEffect, useState } from "react";
-import { getLocalData, setLocalData, useIsMounted } from "../utils";
+import { useIsMounted } from "../utils";
 import productService from "../productService";
-
-
-const LOCALSTORAGE_DATA_KEY = "product";
 
 enum DISPLAY_STATES {
     DISPLAY,
@@ -23,14 +20,13 @@ const ProductView: React.FC = () => {
     const { productId } = useParams<keyof ComponentParams>() as ComponentParams;
     const [loadingState, setLoadingState] = useState(LoadState.LOADING);
     const [displayState, setDisplayState] = useState(DISPLAY_STATES.DISPLAY);
-    const [product, setProduct] = useState(getLocalData<Product>(LOCALSTORAGE_DATA_KEY + productId));
+    const [product, setProduct] = useState<Product>();
 
     const isMounted = useIsMounted();
 
     useEffect(() => {
         setLoadingState(LoadState.LOADING);
         productService.getById(productId).then(res => {
-            setLocalData(LOCALSTORAGE_DATA_KEY + productId, res.data);
             if (!isMounted.current)
                 return;
             setProduct(res.data);

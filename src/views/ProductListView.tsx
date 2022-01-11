@@ -2,19 +2,16 @@ import { Link } from "react-router-dom";
 import Product from "../models/Product";
 import ProductList from "../models/ProductList";
 import "../css/ProductList.css"
-import { getLocalData, regexPrice, setLocalData, useIsMounted } from "../utils";
+import { regexPrice, useIsMounted } from "../utils";
 import LoadState from "../models/LoadingState";
 import productService from "../productService";
 import React, { useEffect, useState } from "react";
 import Cart from "../models/Cart";
 import { useCart } from "../contexts/CartProvider";
 
-//TODO
-const LOCALSTORAGE_DATA_KEY = "product_list";
-
 const ProductListView: React.FC = () => {
     const [loadingState, setLoadingState] = useState(LoadState.LOADING);
-    const [products, setProducts] = useState(getLocalData<ProductList>(LOCALSTORAGE_DATA_KEY));
+    const [products, setProducts] = useState<ProductList>();
     const cart = useCart();
     const isMounted = useIsMounted();
 
@@ -22,10 +19,8 @@ const ProductListView: React.FC = () => {
         setLoadingState(LoadState.LOADING);
 
         productService.getAll().then(res => {
-            const plist = new ProductList();
-            plist.push(...res.data);
-            setLocalData(LOCALSTORAGE_DATA_KEY, plist);
             if (!isMounted.current) return;
+            const plist = new ProductList(...res.data);
             setProducts(plist);
             setLoadingState(LoadState.SUCCESS);
         }).catch(() => setLoadingState(LoadState.ERROR));
