@@ -30,11 +30,11 @@ const ProjectAddView = () => {
 
         setActionText("Adding...");
         await productService.create(product);
-        if (!isMounted)
+        if (!isMounted.current)
             return;
         setActionText("Added !");
         setTimeout(() => {
-            if (isMounted)
+            if (isMounted.current)
                 setActionText(undefined);
         }, 1000);
     }

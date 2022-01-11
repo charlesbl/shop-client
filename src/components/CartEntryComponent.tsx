@@ -29,9 +29,9 @@ const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => 
     }, [isMounted, props.productId]);
 
     return (
-        <div key={props.productId}>
+        <div key={props.productId} className={loadingState === LoadState.LOADING ? "loading" : ""}>
             <div>
-                {loadingState === LoadState.SUCCESS ? product?.name : props.productId}
+                {product === undefined ? props.productId : product.name}
             </div>
             <div>
                 <button onClick={() => cart.removeAmountFromCart(props.productId)}>-</button>

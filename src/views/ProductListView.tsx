@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Product from "../models/Product";
 import ProductList from "../models/ProductList";
 import "../css/ProductList.css"
-import { getLocalData, regexPrice, setLocalData } from "../utils";
+import { getLocalData, regexPrice, setLocalData, useIsMounted } from "../utils";
 import LoadState from "../models/LoadingState";
 import productService from "../productService";
 import React, { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ const ProductListView: React.FC = () => {
     const [loadingState, setLoadingState] = useState(LoadState.LOADING);
     const [products, setProducts] = useState(getLocalData<ProductList>(LOCALSTORAGE_DATA_KEY));
     const cart = useCart();
+    const isMounted = useIsMounted();
 
     useEffect(() => {
         setLoadingState(LoadState.LOADING);
@@ -24,10 +25,11 @@ const ProductListView: React.FC = () => {
             const plist = new ProductList();
             plist.push(...res.data);
             setLocalData(LOCALSTORAGE_DATA_KEY, plist);
+            if (!isMounted.current) return;
             setProducts(plist);
             setLoadingState(LoadState.SUCCESS);
         }).catch(() => setLoadingState(LoadState.ERROR));
-    }, []);
+    }, [isMounted]);
 
     const buyHandler = (ProductId: string) => {
         cart.addToCart(ProductId);

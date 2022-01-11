@@ -9,15 +9,15 @@ const http = axios.create({
 });
 
 const getAll = () => {
-    return http.get<Array<Product>>("/products");
+    return http.get<Array<Product>>("/product/all");
 }
 
 const create = (data: Product) => {
-    return http.post<Product>("/product/add", data);
+    return http.put<Product>("/product/", data);
 }
 
 const remove = (pId: string) => {
-    return http.delete<string>("/product/remove/" + pId);
+    return http.delete<string>("/product/" + pId);
 }
 
 const getById = (pId: string) => {
