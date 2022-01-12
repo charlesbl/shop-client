@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { } from "react";
 import { useCart } from "../contexts/CartProvider";
+import { useProducts } from "../contexts/ProductsProvider";
 import LoadState from "../models/LoadingState";
-import Product from "../models/Product";
-import productService from "../productService";
-import { useIsMounted } from "../utils";
 
 interface ComponentProps {
     productId: string,
@@ -11,20 +9,9 @@ interface ComponentProps {
 }
 
 const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => {
-    const isMounted = useIsMounted();
-    const [loadingState, setLoadingState] = useState(LoadState.LOADING);
-    const [product, setProduct] = useState<Product>();
     const cart = useCart();
-
-    useEffect(() => {
-        setLoadingState(LoadState.LOADING);
-        productService.getById(props.productId).then(res => {
-            if (!isMounted.current)
-                return;
-            setProduct(res.data);
-            setLoadingState(LoadState.SUCCESS);
-        }).catch(() => setLoadingState(LoadState.ERROR));
-    }, [isMounted, props.productId]);
+    const [products, loadingState] = useProducts();
+    const product = products.getProductById(props.productId);
 
     return (
         <div key={props.productId} className={loadingState === LoadState.LOADING ? "loading" : ""}>
@@ -32,9 +19,9 @@ const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => 
                 {product === undefined ? props.productId : product.name}
             </div>
             <div>
-                <button onClick={() => cart.removeAmountFromCart(props.productId)}>-</button>
-                <div>{props.quantity}</div>
                 <button onClick={() => cart.addToCart(props.productId)}>+</button>
+                <div>{props.quantity}</div>
+                <button onClick={() => cart.removeAmountFromCart(props.productId)}>-</button>
             </div>
         </div>
     );

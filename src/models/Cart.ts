@@ -1,20 +1,23 @@
 import { Dispatch, SetStateAction } from 'react';
 import ProductList from '../models/ProductList';
+import { CART_KEY, setLocalData } from '../utils';
 
 export default class Cart {
     private productQuantityMap: Map<string, number>;
     private dispatch?: Dispatch<SetStateAction<Cart>>;
 
-    constructor(cart: Cart | undefined = undefined) {
-        if (cart)
-            this.productQuantityMap = cart.productQuantityMap;
+    constructor(productQuantityMap: Map<string, number> | undefined = undefined) {
+        if (productQuantityMap)
+            this.productQuantityMap = productQuantityMap;
         else
             this.productQuantityMap = new Map<string, number>();
     }
 
     updateContext() {
+        const array = Array.from(this.productQuantityMap.entries());
+        setLocalData(CART_KEY, array);
         if (this.dispatch)
-            this.dispatch(new Cart(this));
+            this.dispatch(new Cart(this.productQuantityMap));
     }
 
     setDispatch(dispatch: Dispatch<SetStateAction<Cart>>) {

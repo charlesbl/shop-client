@@ -2,18 +2,12 @@ import React, { useEffect, useState } from 'react';
 import LoadState from '../models/LoadingState';
 import ProductList from '../models/ProductList';
 import productService from '../productService';
-import { getLocalData, setLocalData } from '../utils';
+import { getLocalData, PRODUCTS_KEY, setLocalData } from '../utils';
 
-interface ProductContextType {
-    products: ProductList,
-    loadState: LoadState
-}
-
-const PRODUCTS_KEY = "products";
 const ProductsContext = React.createContext({} as [ProductList, LoadState]);
 
 const ProductsProvider = (props: any) => {
-    let productList = getLocalData<ProductList>(PRODUCTS_KEY);
+    let productList = getLocalData(PRODUCTS_KEY);
     if (!productList)
         productList = new ProductList();
 

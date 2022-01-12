@@ -1,12 +1,9 @@
-import Product from "../models/Product";
 import { Navigate, useParams } from "react-router-dom";
 import LoadState from "../models/LoadingState";
 import React, { useEffect, useState } from "react";
-import { useIsMounted } from "../utils";
 import productService from "../productService";
 import { useProducts } from "../contexts/ProductsProvider";
 import { useCart } from "../contexts/CartProvider";
-import ProductList from "../models/ProductList";
 
 enum DisplayStates {
     DISPLAY,
