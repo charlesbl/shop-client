@@ -4,13 +4,13 @@ import NotFoundView from './NotFoundView';
 import ProductListView from './ProductListView';
 import ProductAddView from './ProductAddView';
 import { Link, Route, Routes } from 'react-router-dom';
-import CartProvider from '../contexts/CartProvider';
 import ProductView from './ProductView';
 import CartView from './CartView';
+import AppProvider from '../contexts/AppProvider';
 
 const App = () => {
     return (
-        <CartProvider>
+        <AppProvider>
             <div>
                 <header>
                     <nav>
@@ -31,7 +31,7 @@ const App = () => {
                     </Routes>
                 </div >
             </div >
-        </CartProvider>
+        </AppProvider>
     );
 }
 export default App;

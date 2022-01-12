@@ -4,76 +4,91 @@ import LoadState from "../models/LoadingState";
 import React, { useEffect, useState } from "react";
 import { useIsMounted } from "../utils";
 import productService from "../productService";
+import { useProducts } from "../contexts/ProductsProvider";
+import { useCart } from "../contexts/CartProvider";
+import ProductList from "../models/ProductList";
 
-enum DISPLAY_STATES {
+enum DisplayStates {
     DISPLAY,
+    ERROR,
     REMOVING,
     REMOVED,
     REDIRECT
 }
 
-interface ComponentParams {
+type ComponentParams = {
     productId: string;
+    productIds: string;
 }
 
 const ProductView: React.FC = () => {
-    const { productId } = useParams<keyof ComponentParams>() as ComponentParams;
-    const [loadingState, setLoadingState] = useState(LoadState.LOADING);
-    const [displayState, setDisplayState] = useState(DISPLAY_STATES.DISPLAY);
-    const [product, setProduct] = useState<Product>();
+    const { productId } = useParams<ComponentParams>();
+    const [displayState, setDisplayState] = useState(DisplayStates.DISPLAY);
+    const [products, loadState] = useProducts();
+    const cart = useCart();
 
-    const isMounted = useIsMounted();
+    const product = productId ? products.getProductById(productId) : undefined;
 
     useEffect(() => {
-        setLoadingState(LoadState.LOADING);
-        productService.getById(productId).then(res => {
-            if (!isMounted.current)
-                return;
-            setProduct(res.data);
-            setLoadingState(LoadState.SUCCESS);
-        }).catch(() => setLoadingState(LoadState.ERROR));
-    }, [isMounted, productId]);
+        if (!productId) {
+            setDisplayState(DisplayStates.ERROR);
+            return;
+        }
+    }, [productId]);
 
     function removeProduct() {
         if (!product) {
             return;
         }
+        setDisplayState(DisplayStates.REMOVING);
         productService.remove(product.id).then((res) => {
-            setDisplayState(DISPLAY_STATES.REMOVED);
+            setDisplayState(DisplayStates.REMOVED);
             setTimeout(async () => {
-                setDisplayState(DISPLAY_STATES.REDIRECT);
+                setDisplayState(DisplayStates.REDIRECT);
             }, 1000);
         });
     }
 
-    if (displayState === DISPLAY_STATES.REDIRECT) {
-        return (
-            <Navigate to="/products" />
-        );
-    }
-    if (displayState === DISPLAY_STATES.REMOVED) {
-        return (
-            <div>Removed</div>
-        );
-    }
-    if (displayState === DISPLAY_STATES.REMOVING) {
-        return (
-            <div>Removing...</div>
-        );
+    const productDiv = () => {
+        if (product)
+            return <div>
+                <div>{product.id} {product.name} {product.desc} {product.price}</div>
+                <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
+                <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+            </div>;
+        return undefined
     }
 
-    const ProductDiv = product ?
-        <div>
-            <div>{product.id} {product.name} {product.desc} {product.price}</div>
-            {/* <button onClick={() => this.props.getCart().addToCart(p.id)}>Add to cart</button> */}
-            <button onClick={removeProduct} disabled={loadingState !== LoadState.SUCCESS}>Remove from database</button>
-        </div> : undefined;
+    const displayDiv = () => {
+        switch (displayState) {
+            case DisplayStates.DISPLAY:
+                return productDiv();
+            case DisplayStates.ERROR:
+                return <div>Removing error...</div>;
+            case DisplayStates.REMOVING:
+                return <div>Removing...</div>;
+            case DisplayStates.REMOVED:
+                return <div>Removed</div>;
+            case DisplayStates.REDIRECT:
+                return <Navigate to="/products" />;
+        }
+    }
+
+    const loadingDiv = () => {
+        switch (loadState) {
+            case LoadState.LOADING:
+                return <div>Loading...</div>;
+            case LoadState.ERROR:
+                return <div>Error</div>;
+            case LoadState.SUCCESS:
+                return undefined;
+        }
+    }
 
     return (
         <div>
-            {loadingState === LoadState.LOADING ? <div>Loading...</div> : ""}
-            {loadingState === LoadState.ERROR ? <div>Error</div> : ""}
-            {ProductDiv}
+            {loadingDiv()}
+            {displayDiv()}
         </div>
     );
 }

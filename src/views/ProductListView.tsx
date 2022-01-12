@@ -1,30 +1,16 @@
 import { Link } from "react-router-dom";
 import Product from "../models/Product";
-import ProductList from "../models/ProductList";
 import "../css/ProductList.css"
-import { regexPrice, useIsMounted } from "../utils";
+import { regexPrice } from "../utils";
 import LoadState from "../models/LoadingState";
-import productService from "../productService";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Cart from "../models/Cart";
 import { useCart } from "../contexts/CartProvider";
+import { useProducts } from "../contexts/ProductsProvider";
 
 const ProductListView: React.FC = () => {
-    const [loadingState, setLoadingState] = useState(LoadState.LOADING);
-    const [products, setProducts] = useState<ProductList>();
     const cart = useCart();
-    const isMounted = useIsMounted();
-
-    useEffect(() => {
-        setLoadingState(LoadState.LOADING);
-
-        productService.getAll().then(res => {
-            if (!isMounted.current) return;
-            const plist = new ProductList(...res.data);
-            setProducts(plist);
-            setLoadingState(LoadState.SUCCESS);
-        }).catch(() => setLoadingState(LoadState.ERROR));
-    }, [isMounted]);
+    const [products, loadState] = useProducts();
 
     const buyHandler = (ProductId: string) => {
         cart.addToCart(ProductId);
@@ -47,8 +33,8 @@ const ProductListView: React.FC = () => {
     }
 
     return (
-        <div id="product-list" className={loadingState === LoadState.LOADING ? "loading" : ""} >
-            {loadingState === LoadState.LOADING ? <div>Loading...</div> : ""}
+        <div id="product-list" className={loadState === LoadState.LOADING ? "loading" : ""} >
+            {loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
             {products?.map((product: Product) => renderProduct(product, cart))}
         </div>
     );
