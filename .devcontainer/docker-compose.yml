@@ -1,5 +1,5 @@
 version: '3.4'
 services:
-  shop-client:
+  shop-client-dev:
     volumes:
       - .:/usr/src/app:cached
