@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import Product from "../models/Product";
-import "../css/ProductList.css"
-import { regexPrice } from "../utils";
+import Product, { formatProductPrice, regexPrice } from "../models/Product";
+import "../css/ProductList.css";
 import LoadState from "../models/LoadingState";
 import React from "react";
 import Cart from "../models/Cart";
@@ -18,7 +17,7 @@ const ProductListView: React.FC = () => {
 
     const renderProduct = (product: Product, cart: Cart) => {
         const errorPrice = !regexPrice.test(product.price);
-        const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{(Number.parseInt(product.price) / 100).toFixed(2)} €</div>
+        const priceDiv = errorPrice ? <div className="price">Error</div> : <div className="price">{formatProductPrice(product.price)} €</div>
         return (
             <div key={product.id} className="short-product">
                 <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>

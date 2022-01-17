@@ -1,9 +1,5 @@
 import { useRef, useEffect } from "react";
 
-export const regexPrice = /^\d+(\.\d{1,2})?$/;
-export const CART_KEY = "cart";
-export const PRODUCTS_KEY = "products";
-
 export const useIsMounted = () => {
     const mounted = useRef(false);
     useEffect(() => {

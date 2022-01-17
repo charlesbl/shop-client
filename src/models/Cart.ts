@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import ProductList from '../models/ProductList';
-import { CART_KEY, setLocalData } from '../utils';
+import { setLocalData } from '../utils';
+
+export const CART_KEY = "cart";
 
 export default class Cart {
     private productQuantityMap: Map<string, number>;
@@ -61,11 +63,6 @@ export default class Cart {
             .forEach((productId) => this.removeProduct(productId));
 
         this.updateContext();
-        // Array.from(this.keys()).forEach((id: string) => {
-        //     if (!productList.getProductById(id)) {
-        //         this.removeAllFromCart(id);
-        //     }
-        // });
     }
 
     getProductQuantity(productId: string): number | undefined {

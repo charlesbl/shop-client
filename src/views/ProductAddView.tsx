@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Product from "../models/Product";
+import Product, { regexPrice } from "../models/Product";
 import productService from "../productService";
-import { regexPrice, useIsMounted } from "../utils";
+import { useIsMounted } from "../utils";
 
 interface ComponentState {
     name: string,
@@ -36,7 +36,7 @@ const ProjectAddView = () => {
         setTimeout(() => {
             if (isMounted.current)
                 setActionText(undefined);
-        }, 1000);
+        }, 500);
     }
 
 
@@ -46,9 +46,7 @@ const ProjectAddView = () => {
     }
 
 
-    const verifyForm = () => {
-        return regexPrice.test(state.price);
-    }
+    const verifyForm = () => regexPrice.test(state.price);
 
     return (
         <form id="Add" onSubmit={handleSubmit}>

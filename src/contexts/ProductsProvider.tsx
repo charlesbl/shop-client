@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import LoadState from '../models/LoadingState';
+import { PRODUCTS_KEY } from '../models/Product';
 import ProductList from '../models/ProductList';
 import productService from '../productService';
-import { getLocalData, PRODUCTS_KEY, setLocalData } from '../utils';
+import { getLocalData, setLocalData } from '../utils';
 
 const ProductsContext = React.createContext({} as [ProductList, LoadState]);
 

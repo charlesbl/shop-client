@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Cart from '../models/Cart';
-import { CART_KEY, getLocalData } from '../utils';
+import Cart, { CART_KEY } from '../models/Cart';
+import { getLocalData } from '../utils';
 
 const CartContext = React.createContext({} as Cart);
 
@@ -16,6 +16,6 @@ const CartProvider = (props: any) => {
         </CartContext.Provider>
     );
 }
-export const useCart = () => React.useContext(CartContext);
-
 export default CartProvider;
+
+export const useCart = () => React.useContext(CartContext);

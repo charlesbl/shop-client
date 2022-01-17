@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import productService from "../productService";
 import { useProducts } from "../contexts/ProductsProvider";
 import { useCart } from "../contexts/CartProvider";
+import { formatProductPrice } from "../models/Product";
 
 enum DisplayStates {
     DISPLAY,
@@ -48,11 +49,16 @@ const ProductView: React.FC = () => {
 
     const productDiv = () => {
         if (product)
-            return <div>
-                <div>{product.id} {product.name} {product.desc} {product.price}</div>
-                <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
-                <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
-            </div>;
+            return (
+                <div>
+                    <div>{product.id}</div>
+                    <div>{product.name}</div>
+                    <div>{product.desc}</div>
+                    <div>{formatProductPrice(product.price)} €</div>
+                    <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
+                    <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+                </div>
+            );
         return undefined
     }
 
