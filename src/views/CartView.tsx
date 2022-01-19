@@ -3,16 +3,18 @@ import CartEntryComponent from "../components/CartEntryComponent";
 import { useCart } from "../contexts/CartProvider";
 
 const CartView: React.FC = () => {
-    const cart = useCart();
+    const cartContext = useCart();
+
+    const entriesList = Array.from(cartContext.cart.entries(), ([productId, quantity]) => {
+        return <CartEntryComponent key={(productId)} productId={productId} quantity={quantity} />
+    });
 
     return (
         <div id="cart">
             <h1>
                 Cart
             </h1>
-            <div>{cart.getEntries().map(([productId, quantity]) => {
-                return <CartEntryComponent key={(productId)} productId={productId} quantity={quantity} />
-            })}</div>
+            <div>{entriesList}</div>
         </div>
     );
 }

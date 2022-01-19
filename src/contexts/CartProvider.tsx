@@ -1,17 +1,39 @@
 import React, { useState } from 'react';
-import Cart, { CART_KEY } from '../models/Cart';
-import { getLocalData } from '../utils';
+import { addToCart, Cart, removeAmountFromCart } from '../models/Cart';
+import { getLocalData, setLocalData } from '../utils';
 
-const CartContext = React.createContext({} as Cart);
+interface IContextCart {
+    cart: Cart;
+    addToCart: (id: string, count?: number) => void;
+    removeAmountFromCart: (id: string, count?: number) => void;
+}
+
+const CART_KEY = "cart";
+const CartContext = React.createContext({} as IContextCart);
 
 const CartProvider = (props: any) => {
-    const productQuantityMap = getLocalData(CART_KEY);
-    const localCart = new Cart(new Map<string, number>(productQuantityMap));
+    const localCart = new Map<string, number>(getLocalData(CART_KEY));
 
     const [cart, setState] = useState(localCart);
-    cart.setDispatch(setState);
+
+    const updateAndSaveState = () => {
+        setState(new Map<string, number>(cart));
+        setLocalData(CART_KEY, Array.from(cart.entries()));
+    }
+
+    const contextCart: IContextCart = {
+        cart: cart,
+        addToCart: (id, count) => {
+            addToCart(cart, id, count);
+            updateAndSaveState();
+        },
+        removeAmountFromCart: (id, count) => {
+            removeAmountFromCart(cart, id, count);
+            updateAndSaveState();
+        }
+    }
     return (
-        <CartContext.Provider value={cart}>
+        <CartContext.Provider value={contextCart}>
             {props.children}
         </CartContext.Provider>
     );
