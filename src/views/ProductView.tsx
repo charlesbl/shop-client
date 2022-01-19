@@ -34,12 +34,12 @@ const ProductView: React.FC = () => {
         }
     }, [productId]);
 
-    function removeProduct() {
+    const removeProduct = () => {
         if (!product) {
             return;
         }
         setDisplayState(DisplayStates.REMOVING);
-        productService.remove(product.id).then((res) => {
+        productService.remove(product.id).then(() => {
             setDisplayState(DisplayStates.REMOVED);
             setTimeout(async () => {
                 setDisplayState(DisplayStates.REDIRECT);
