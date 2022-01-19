@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { addToCart, Cart, removeAmountFromCart } from '../models/Cart';
+import { addToCart, Cart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart';
 import { getLocalData, setLocalData } from '../utils';
+import { useProducts } from './ProductsProvider';
 
 interface IContextCart {
     cart: Cart;
@@ -13,10 +14,12 @@ const CartContext = React.createContext({} as IContextCart);
 
 const CartProvider = (props: any) => {
     const localCart = new Map<string, number>(getLocalData(CART_KEY));
+    const [products] = useProducts();
 
     const [cart, setState] = useState(localCart);
 
     const updateAndSaveState = () => {
+        removeUnavailableProductFromCart(cart, products);
         setState(new Map<string, number>(cart));
         setLocalData(CART_KEY, Array.from(cart.entries()));
     }
