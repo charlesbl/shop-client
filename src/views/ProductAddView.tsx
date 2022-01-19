@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useProducts } from "../contexts/ProductsProvider";
 import Product, { regexPrice } from "../models/Product";
 import productService from "../productService";
 import { useIsMounted } from "../utils";
@@ -17,6 +18,7 @@ const ProjectAddView = () => {
     } as ComponentState);
     const [actionText, setActionText] = useState<string | undefined>(undefined);
     const isMounted = useIsMounted();
+    const [, , updateProducts] = useProducts();
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -30,12 +32,12 @@ const ProjectAddView = () => {
 
         setActionText("Adding...");
         await productService.create(product);
-        if (!isMounted.current)
-            return;
+        updateProducts();
+        if (!isMounted.current) return;
         setActionText("Added !");
         setTimeout(() => {
-            if (isMounted.current)
-                setActionText(undefined);
+            if (!isMounted.current) return;
+            setActionText(undefined);
         }, 500);
     }
 

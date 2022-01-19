@@ -4,7 +4,7 @@ import Product, { PRODUCTS_KEY } from '../models/Product';
 import productService from '../productService';
 import { getLocalData, setLocalData } from '../utils';
 
-const ProductsContext = React.createContext({} as [Array<Product>, LoadState]);
+const ProductsContext = React.createContext({} as [Array<Product>, LoadState, () => void]);
 
 const ProductsProvider = (props: any) => {
     const productList = getLocalData(PRODUCTS_KEY) ?? [];
@@ -12,7 +12,7 @@ const ProductsProvider = (props: any) => {
     const [products, setProducts] = useState(productList);
     const [loadState, setLoadingState] = useState(LoadState.LOADING);
 
-    useEffect(() => {
+    const updateProducts = () => {
         setLoadingState(LoadState.LOADING);
 
         productService.getAll().then(res => {
@@ -21,10 +21,14 @@ const ProductsProvider = (props: any) => {
             setLoadingState(LoadState.SUCCESS);
             setLocalData(PRODUCTS_KEY, plist);
         }).catch(() => setLoadingState(LoadState.ERROR));
+    }
+
+    useEffect(() => {
+        updateProducts();
     }, []);
 
     return (
-        <ProductsContext.Provider value={[products, loadState]}>
+        <ProductsContext.Provider value={[products, loadState, updateProducts]}>
             {props.children}
         </ProductsContext.Provider>
     );
