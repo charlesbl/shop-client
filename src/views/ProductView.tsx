@@ -5,6 +5,7 @@ import productService from "../productService";
 import { useProducts } from "../contexts/ProductsProvider";
 import { useCart } from "../contexts/CartProvider";
 import { formatProductPrice } from "../models/Product";
+import { getProductById } from "../models/ProductList";
 
 enum DisplayStates {
     DISPLAY,
@@ -25,7 +26,7 @@ const ProductView: React.FC = () => {
     const [products, loadState] = useProducts();
     const cart = useCart();
 
-    const product = productId ? products.getProductById(productId) : undefined;
+    const product = productId ? getProductById(products, productId) : undefined;
 
     useEffect(() => {
         if (!productId) {
