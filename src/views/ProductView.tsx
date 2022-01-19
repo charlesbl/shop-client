@@ -6,6 +6,7 @@ import { useProducts } from "../contexts/ProductsProvider";
 import { useCart } from "../contexts/CartProvider";
 import { formatProductPrice } from "../models/Product";
 import { getProductById } from "../models/ProductList";
+import { useIsMounted } from "../utils";
 
 enum DisplayStates {
     DISPLAY,
@@ -25,6 +26,7 @@ const ProductView: React.FC = () => {
     const [displayState, setDisplayState] = useState(DisplayStates.DISPLAY);
     const [products, loadState] = useProducts();
     const cart = useCart();
+    const isMounted = useIsMounted();
 
     const product = productId ? getProductById(products, productId) : undefined;
 
@@ -41,8 +43,10 @@ const ProductView: React.FC = () => {
         }
         setDisplayState(DisplayStates.REMOVING);
         productService.remove(product.id).then(() => {
+            if (!isMounted.current) return;
             setDisplayState(DisplayStates.REMOVED);
             setTimeout(async () => {
+                if (!isMounted.current) return;
                 setDisplayState(DisplayStates.REDIRECT);
             }, 1000);
         });
