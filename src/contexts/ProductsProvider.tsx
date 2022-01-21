@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LoadState from '../models/LoadingState';
-import Product, { PRODUCTS_KEY } from '../models/Product';
+import Product, { isValidProduct, PRODUCTS_KEY } from '../models/Product';
 import productService from '../productService';
 import { getLocalData, setLocalData } from '../utils';
 
@@ -16,7 +16,9 @@ const ProductsProvider = (props: any) => {
         setLoadingState(LoadState.LOADING);
 
         productService.getAll().then(res => {
-            const plist = new Array<Product>(...res.data);
+            // console.log(res.data);
+            const plist = res.data.filter((product) => isValidProduct(product));
+            // console.log(plist);
             setProducts(plist);
             setLoadingState(LoadState.SUCCESS);
             setLocalData(PRODUCTS_KEY, plist);

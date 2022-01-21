@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { addToCart, Cart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart';
+import { addToCart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart';
 import { getLocalData, setLocalData } from '../utils';
 import { useProducts } from './ProductsProvider';
 
-interface IContextCart {
-    cart: Cart;
+type IContextCart = {
+    getCartQuantity: (id: string) => number | undefined;
+    getAll: () => IterableIterator<[string, number]>;
     addToCart: (id: string, count?: number) => void;
     removeAmountFromCart: (id: string, count?: number) => void;
 }
@@ -16,23 +17,24 @@ const CartProvider = (props: any) => {
     const localCart = new Map<string, number>(getLocalData(CART_KEY));
     const [products] = useProducts();
 
-    const [cart, setState] = useState(localCart);
+    const [productQuantityMap, setState] = useState(localCart);
 
-    const updateAndSaveState = () => {
-        removeUnavailableProductFromCart(cart, products);
-        setState(new Map<string, number>(cart));
-        setLocalData(CART_KEY, Array.from(cart.entries()));
+    const updateAndSave = () => {
+        removeUnavailableProductFromCart(productQuantityMap, products);
+        setState(new Map<string, number>(productQuantityMap));
+        setLocalData(CART_KEY, Array.from(productQuantityMap.entries()));
     }
 
     const contextCart: IContextCart = {
-        cart: cart,
+        getCartQuantity: (id) => productQuantityMap.get(id),
+        getAll: () => productQuantityMap.entries(),
         addToCart: (id, count) => {
-            addToCart(cart, id, count);
-            updateAndSaveState();
+            addToCart(productQuantityMap, id, count);
+            updateAndSave();
         },
         removeAmountFromCart: (id, count) => {
-            removeAmountFromCart(cart, id, count);
-            updateAndSaveState();
+            removeAmountFromCart(productQuantityMap, id, count);
+            updateAndSave();
         }
     }
     return (

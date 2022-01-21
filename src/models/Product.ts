@@ -1,5 +1,5 @@
 export const PRODUCTS_KEY = "products";
-export const regexPrice = /^\d+(\.\d{1,2})?$/;
+export const regexPrice = /^\d+(\.\d{2})$/;
 
 export default class Product {
     constructor(
@@ -10,4 +10,5 @@ export default class Product {
     }
 }
 
-export const formatProductPrice = (price: string) => (Number.parseInt(price) / 100).toFixed(2);
+export const isValidProduct = (product: Product) => /^\d*$/.test(product.price);
+export const formatProductPrice = (price: string) => `${(Number.parseInt(price) / 100).toFixed(2)} €`;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PriceInput from "../components/PriceInput";
 import { useProducts } from "../contexts/ProductsProvider";
 import Product, { regexPrice } from "../models/Product";
 import productService from "../productService";
@@ -47,7 +48,6 @@ const ProjectAddView = () => {
         setState(newState);
     }
 
-
     const verifyForm = () => regexPrice.test(state.price);
 
     return (
@@ -59,7 +59,7 @@ const ProjectAddView = () => {
                 Description: <input type="text" name="desc" value={state.desc} onChange={handleChange}></input>
             </div>
             <div>
-                Price: <input type="text" name="price" value={state.price} onChange={handleChange}></input>
+                Price: <PriceInput name="price" value={state.price} onChange={handleChange} />
             </div>
             <div>
                 <input type="submit" value="Add product" disabled={!verifyForm() || actionText !== undefined} />

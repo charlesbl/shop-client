@@ -18,13 +18,12 @@ enum DisplayStates {
 
 type ComponentParams = {
     productId: string;
-    productIds: string;
 }
 
 const ProductView: React.FC = () => {
     const { productId } = useParams<ComponentParams>();
     const [displayState, setDisplayState] = useState(DisplayStates.DISPLAY);
-    const [products, loadState] = useProducts();
+    const [products, loadState, updateProducts] = useProducts();
     const cart = useCart();
     const isMounted = useIsMounted();
 
@@ -43,12 +42,13 @@ const ProductView: React.FC = () => {
         }
         setDisplayState(DisplayStates.REMOVING);
         productService.remove(product.id).then(() => {
+            updateProducts();
             if (!isMounted.current) return;
             setDisplayState(DisplayStates.REMOVED);
             setTimeout(async () => {
                 if (!isMounted.current) return;
                 setDisplayState(DisplayStates.REDIRECT);
-            }, 1000);
+            }, 500);
         });
     }
 
@@ -60,8 +60,13 @@ const ProductView: React.FC = () => {
                     <div>{product.name}</div>
                     <div>{product.desc}</div>
                     <div>{formatProductPrice(product.price)} €</div>
-                    <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
-                    <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+                    <div>
+                        <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
+                        <div>{cart.getCartQuantity(product.id)}</div>
+                    </div>
+                    <div>
+                        <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+                    </div>
                 </div>
             );
         return undefined

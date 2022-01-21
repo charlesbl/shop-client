@@ -1,12 +1,12 @@
 import Product from "./Product";
 import { getProductById } from "./ProductList";
 
-export type Cart = Map<string, number>;
+type CartMap = Map<string, number>;
 
-export const addToCart = (cart: Cart, id: string, count = 1) => cart.set(id, (cart.get(id) ?? 0) + count);
+export const addToCart = (cart: CartMap, id: string, count = 1) => cart.set(id, (cart.get(id) ?? 0) + count);
 
 /** Remove a limited quantity of a Product */
-export const removeAmountFromCart = (cart: Cart, id: string, count = 1) => {
+export const removeAmountFromCart = (cart: CartMap, id: string, count = 1) => {
     const currentQuantity = cart.get(id);
     if (!currentQuantity) return;
 
@@ -18,9 +18,9 @@ export const removeAmountFromCart = (cart: Cart, id: string, count = 1) => {
     }
 }
 
-export const removeUnavailableProductFromCart = (cart: Cart, productList: Array<Product>) =>
+export const removeUnavailableProductFromCart = (cart: CartMap, productList: Array<Product>) =>
     Array.from(cart.keys())
         .filter((productId) => !getProductById(productList, productId))
         .forEach((productId) => cart.delete(productId));
 
-export const getTotalProduct = (cart: Cart) => Array.from(cart.values()).reduce((sum, current) => sum + current, 0);
+export const getTotalProduct = (cart: CartMap) => Array.from(cart.values()).reduce((sum, current) => sum + current, 0);
