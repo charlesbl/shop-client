@@ -2,33 +2,35 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
 import IProduct, { formatProductPrice } from "../../models/ProductFunctions";
+import ProductCartQuantity from "../shared/ProductCartQuantity";
 
 const ProductList: React.FC = () => {
     const cart = useCart();
     const [products] = useProducts();
 
-    const buyHandler = (ProductId: string) => {
-        return () => cart.addToCart(ProductId);
+    const addProductDiv = (pid: string) => {
+        if (cart.getCartQuantity(pid))
+            return <ProductCartQuantity productId={pid} />
+        else
+            return <button onClick={() => cart.addToCart(pid)}>Add to cart</button>
+    }
+
+    const renderProduct = (product: IProduct) => {
+        return (
+            <div key={product.id} className="short-product">
+                <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>
+                <p className="description">{product.desc}</p>
+                <div>
+                    <div className="price">{formatProductPrice(product.price)}</div>
+                    {addProductDiv(product.id)}
+                </div>
+            </div>
+        );
     }
 
     return (
         <div id="product-list">
-            {products?.map((product: IProduct) => renderProduct(product, cart.getCartQuantity(product.id), buyHandler(product.id)))}
-        </div>
-    );
-}
-
-
-const renderProduct = (product: IProduct, quantityInCart: number | undefined, buyHandler: () => void) => {
-    return (
-        <div key={product.id} className="short-product">
-            <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>
-            <p className="description">{product.desc}</p>
-            <div>
-                <div className="price">{formatProductPrice(product.price)}</div>
-                <button onClick={() => buyHandler()}>Buy</button>
-                {quantityInCart}
-            </div>
+            {products?.map((product: IProduct) => renderProduct(product))}
         </div>
     );
 }

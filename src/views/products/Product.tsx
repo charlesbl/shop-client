@@ -6,6 +6,7 @@ import { useProducts } from "../../contexts/ProductsProvider";
 import { useCart } from "../../contexts/CartProvider";
 import { useIsMounted } from "../../utils";
 import { formatProductPrice, getProductById } from "../../models/ProductFunctions";
+import ProductCartQuantity from "../shared/ProductCartQuantity";
 
 enum DisplayStates {
     DISPLAY,
@@ -51,17 +52,21 @@ const ProductView: React.FC = () => {
         });
     }
 
+    const addProductDiv = (pid: string) => {
+        if (cart.getCartQuantity(pid))
+            return <ProductCartQuantity productId={pid} />
+        else
+            return <button onClick={() => cart.addToCart(pid)}>Add to cart</button>
+    }
+
     const productDiv = () => {
         return product ? (
             <div>
                 <div>{product.id}</div>
                 <div>{product.name}</div>
                 <div>{product.desc}</div>
-                <div>{formatProductPrice(product.price)} €</div>
-                <div>
-                    <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
-                    <div>{cart.getCartQuantity(product.id)}</div>
-                </div>
+                <div>{formatProductPrice(product.price)}</div>
+                {addProductDiv(product.id)}
                 <div>
                     <button onClick={removeProduct}>Remove from database</button>
                 </div>

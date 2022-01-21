@@ -1,25 +1,24 @@
 import React, { } from "react";
-import { useCart } from "../../contexts/CartProvider";
-import IProduct from "../../models/ProductFunctions";
+import { useProducts } from "../../contexts/ProductsProvider";
+import { getProductById } from "../../models/ProductFunctions";
+import ProductCartQuantity from "../shared/ProductCartQuantity";
 
-interface ComponentProps {
-    product: IProduct,
-    quantity: number
+type ComponentProps = {
+    productId: string;
 }
 
 const CartEntry: React.FC<ComponentProps> = (props: ComponentProps) => {
-    const cart = useCart();
+    const [products] = useProducts();
+    const product = getProductById(products, props.productId);
+
+    if (!product) return null;
 
     return (
-        <div key={props.product.id}>
+        <div key={props.productId}>
             <div>
-                {props.product.name}
+                {product.name}
             </div>
-            <div>
-                <button onClick={() => cart.addToCart(props.product.id)}>+</button>
-                <div>{props.quantity}</div>
-                <button onClick={() => cart.removeAmountFromCart(props.product.id)}>-</button>
-            </div>
+            <ProductCartQuantity productId={props.productId} />
         </div>
     );
 }
