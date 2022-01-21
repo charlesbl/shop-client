@@ -1,4 +1,4 @@
-const NotFoundView = () => {
+const NotFound = () => {
     return (
         <div id="not-found">
             <h1>
@@ -7,4 +7,4 @@ const NotFoundView = () => {
         </div>
     );
 }
-export default NotFoundView;
+export default NotFound;

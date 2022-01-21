@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../css/Home.css"
 
-const HomeView = () => {
+const Home = () => {
     return (
         <div id="home">
             <h1>
@@ -14,4 +14,4 @@ const HomeView = () => {
         </div>
     );
 }
-export default HomeView;
+export default Home;

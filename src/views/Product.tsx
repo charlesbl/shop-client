@@ -53,23 +53,21 @@ const ProductView: React.FC = () => {
     }
 
     const productDiv = () => {
-        if (product)
-            return (
+        return product ? (
+            <div>
+                <div>{product.id}</div>
+                <div>{product.name}</div>
+                <div>{product.desc}</div>
+                <div>{formatProductPrice(product.price)} €</div>
                 <div>
-                    <div>{product.id}</div>
-                    <div>{product.name}</div>
-                    <div>{product.desc}</div>
-                    <div>{formatProductPrice(product.price)} €</div>
-                    <div>
-                        <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
-                        <div>{cart.getCartQuantity(product.id)}</div>
-                    </div>
-                    <div>
-                        <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
-                    </div>
+                    <button onClick={() => cart.addToCart(product.id)}>Add to cart</button>
+                    <div>{cart.getCartQuantity(product.id)}</div>
                 </div>
-            );
-        return undefined
+                <div>
+                    <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+                </div>
+            </div>
+        ) : undefined;
     }
 
     const displayDiv = () => {

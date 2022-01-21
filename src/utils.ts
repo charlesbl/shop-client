@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 
+export const regexPrice = /^\d+(\.\d{2})$/;
+
 export const useIsMounted = () => {
     const mounted = useRef(false);
     useEffect(() => {
@@ -11,11 +13,11 @@ export const useIsMounted = () => {
     return mounted;
 }
 
-export function setLocalData<T>(key: string, t: T) {
+export const setLocalData = <T>(key: string, t: T) => {
     localStorage.setItem(key, JSON.stringify(t));
 }
 
-export function getLocalData(key: string): any | undefined {
+export const getLocalData = (key: string) => {
     const data = localStorage.getItem(key);
     if (data)
         return JSON.parse(data);

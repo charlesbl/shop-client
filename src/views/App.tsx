@@ -1,11 +1,11 @@
 import '../css/App.css';
-import HomeView from './HomeView';
-import NotFoundView from './NotFoundView';
-import ProductListView from './ProductListView';
-import ProductAddView from './ProductAddView';
+import Home from './Home';
+import NotFound from './NotFound';
+import ProductList from './ProductList';
+import ProductAddView from './ProductAdd';
 import { Link, Route, Routes } from 'react-router-dom';
-import ProductView from './ProductView';
-import CartView from './CartView';
+import ProductView from './Product';
+import CartView from './cart/Cart';
 import AppProvider from '../contexts/AppProvider';
 
 const App = () => {
@@ -22,12 +22,12 @@ const App = () => {
                 </header>
                 <div id="main">
                     <Routes>
-                        <Route path="/" element={<HomeView />} />
-                        <Route path="/products" element={<ProductListView />} />
+                        <Route path="/" element={<Home />} />
+                        <Route path="/products" element={<ProductList />} />
                         <Route path="/product/:productId" element={<ProductView />} />
                         <Route path="/addproduct/" element={<ProductAddView />} />
                         <Route path="/cart/" element={<CartView />} />
-                        <Route path="*" element={<NotFoundView />} />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div >
             </div >

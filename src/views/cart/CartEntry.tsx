@@ -1,13 +1,13 @@
 import React, { } from "react";
-import { useCart } from "../contexts/CartProvider";
-import Product from "../models/Product";
+import { useCart } from "../../contexts/CartProvider";
+import Product from "../../models/Product";
 
 interface ComponentProps {
     product: Product,
     quantity: number
 }
 
-const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => {
+const CartEntry: React.FC<ComponentProps> = (props: ComponentProps) => {
     const cart = useCart();
 
     return (
@@ -23,4 +23,4 @@ const CartEntryComponent: React.FC<ComponentProps> = (props: ComponentProps) => 
         </div>
     );
 }
-export default CartEntryComponent;
+export default CartEntry;

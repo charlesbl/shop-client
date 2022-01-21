@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import PriceInput from "../components/PriceInput";
 import { useProducts } from "../contexts/ProductsProvider";
-import Product, { regexPrice } from "../models/Product";
+import Product from "../models/Product";
 import productService from "../productService";
-import { useIsMounted } from "../utils";
+import { regexPrice, useIsMounted } from "../utils";
+import PriceInput from "./shared/PriceInput";
 
 interface ComponentState {
     name: string,
@@ -11,7 +11,7 @@ interface ComponentState {
     price: string
 }
 
-const ProjectAddView = () => {
+const ProjectAdd = () => {
     const [state, setState] = useState({
         name: "Product name",
         desc: "Description",
@@ -71,4 +71,4 @@ const ProjectAddView = () => {
         </form>
     );
 }
-export default ProjectAddView;
+export default ProjectAdd;

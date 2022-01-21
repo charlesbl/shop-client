@@ -1,5 +1,4 @@
 export const PRODUCTS_KEY = "products";
-export const regexPrice = /^\d+(\.\d{2})$/;
 
 export default class Product {
     constructor(

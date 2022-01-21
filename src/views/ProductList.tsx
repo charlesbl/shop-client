@@ -6,7 +6,7 @@ import React from "react";
 import { useCart } from "../contexts/CartProvider";
 import { useProducts } from "../contexts/ProductsProvider";
 
-const ProductListView: React.FC = () => {
+const ProductList: React.FC = () => {
     const cart = useCart();
     const [products, loadState] = useProducts();
 
@@ -37,4 +37,4 @@ const renderProduct = (product: Product, quantityInCart: number | undefined, buy
     );
 }
 
-export default ProductListView;
+export default ProductList;
