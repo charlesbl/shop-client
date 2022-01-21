@@ -72,7 +72,7 @@ const ProductView: React.FC = () => {
     const displayDiv = () => {
         switch (displayState) {
             case DisplayStates.DISPLAY:
-                return productDiv();
+                return productDiv() ?? <Navigate to="/NotFound" />;
             case DisplayStates.ERROR:
                 return <div>Removing error...</div>;
             case DisplayStates.REMOVING:

@@ -10,7 +10,7 @@ import ProductAdd from './products/ProductAdd';
 import ProductList from './products/ProductList';
 
 export const RoutesDiv = () => {
-    const [, , loadState] = useProducts();
+    const [, loadState,] = useProducts();
 
 
     switch (loadState) {
