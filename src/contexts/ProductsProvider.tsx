@@ -4,7 +4,7 @@ import IProduct, { isValidProduct, PRODUCTS_KEY } from '../models/ProductFunctio
 import productService from '../productService';
 import { getLocalData, setLocalData } from '../utils';
 
-const ProductsContext = React.createContext({} as [Array<IProduct>, LoadState, () => void]);
+const ProductsContext = React.createContext({} as [Array<IProduct>, () => void, LoadState]);
 
 const ProductsProvider = (props: any) => {
     const productList = getLocalData(PRODUCTS_KEY) ?? [];
@@ -16,9 +16,7 @@ const ProductsProvider = (props: any) => {
         setLoadingState(LoadState.LOADING);
 
         productService.getAll().then(res => {
-            // console.log(res.data);
             const plist = res.data.filter((product) => isValidProduct(product));
-            // console.log(plist);
             setProducts(plist);
             setLoadingState(LoadState.SUCCESS);
             setLocalData(PRODUCTS_KEY, plist);
@@ -30,7 +28,7 @@ const ProductsProvider = (props: any) => {
     }, []);
 
     return (
-        <ProductsContext.Provider value={[products, loadState, updateProducts]}>
+        <ProductsContext.Provider value={[products, updateProducts, loadState]}>
             {props.children}
         </ProductsContext.Provider>
     );

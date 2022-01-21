@@ -19,7 +19,7 @@ const ProjectAdd = () => {
     } as ComponentState);
     const [actionText, setActionText] = useState<string | undefined>(undefined);
     const isMounted = useIsMounted();
-    const [, , updateProducts] = useProducts();
+    const [, updateProducts] = useProducts();
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();

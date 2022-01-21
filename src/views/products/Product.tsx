@@ -1,5 +1,5 @@
+import "../../css/ProductList.css";
 import { Navigate, useParams } from "react-router-dom";
-import LoadState from "../../models/LoadingState";
 import React, { useEffect, useState } from "react";
 import productService from "../../productService";
 import { useProducts } from "../../contexts/ProductsProvider";
@@ -22,7 +22,7 @@ type ComponentParams = {
 const ProductView: React.FC = () => {
     const { productId } = useParams<ComponentParams>();
     const [displayState, setDisplayState] = useState(DisplayStates.DISPLAY);
-    const [products, loadState, updateProducts] = useProducts();
+    const [products, updateProducts] = useProducts();
     const cart = useCart();
     const isMounted = useIsMounted();
 
@@ -63,7 +63,7 @@ const ProductView: React.FC = () => {
                     <div>{cart.getCartQuantity(product.id)}</div>
                 </div>
                 <div>
-                    <button onClick={removeProduct} disabled={loadState !== LoadState.SUCCESS}>Remove from database</button>
+                    <button onClick={removeProduct}>Remove from database</button>
                 </div>
             </div>
         ) : undefined;
@@ -72,7 +72,7 @@ const ProductView: React.FC = () => {
     const displayDiv = () => {
         switch (displayState) {
             case DisplayStates.DISPLAY:
-                return productDiv();
+                return productDiv() ?? <Navigate to="/NotFound" />;
             case DisplayStates.ERROR:
                 return <div>Removing error...</div>;
             case DisplayStates.REMOVING:
@@ -84,20 +84,9 @@ const ProductView: React.FC = () => {
         }
     }
 
-    const loadingDiv = () => {
-        switch (loadState) {
-            case LoadState.LOADING:
-                return <div>Loading...</div>;
-            case LoadState.ERROR:
-                return <div>Error</div>;
-            case LoadState.SUCCESS:
-                return undefined;
-        }
-    }
-
     return (
         <div>
-            {loadingDiv() ?? displayDiv()}
+            {displayDiv()}
         </div>
     );
 }
