@@ -1,12 +1,7 @@
 import '../css/App.css';
-import Home from './Home';
-import NotFound from './NotFound';
-import { Link, Route, Routes } from 'react-router-dom';
-import Cart from './cart/Cart';
+import { Link } from 'react-router-dom';
 import AppProvider from '../contexts/AppProvider';
-import Product from './products/Product';
-import ProductList from './products/ProductList';
-import ProductAdd from './products/ProductAdd';
+import { RoutesDiv } from './Routes';
 
 const App = () => {
     return (
@@ -21,14 +16,7 @@ const App = () => {
                     </nav>
                 </header>
                 <div id="main">
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/products" element={<ProductList />} />
-                        <Route path="/product/:productId" element={<Product />} />
-                        <Route path="/addproduct/" element={<ProductAdd />} />
-                        <Route path="/cart/" element={<Cart />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
+                    <RoutesDiv />
                 </div >
             </div >
         </AppProvider>
