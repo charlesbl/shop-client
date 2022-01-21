@@ -16,9 +16,7 @@ const ProductsProvider = (props: any) => {
         setLoadingState(LoadState.LOADING);
 
         productService.getAll().then(res => {
-            // console.log(res.data);
             const plist = res.data.filter((product) => isValidProduct(product));
-            // console.log(plist);
             setProducts(plist);
             setLoadingState(LoadState.SUCCESS);
             setLocalData(PRODUCTS_KEY, plist);
