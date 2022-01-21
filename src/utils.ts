@@ -22,5 +22,5 @@ export const getLocalData = (key: string) => {
     if (data)
         return JSON.parse(data);
     else
-        return undefined
+        return undefined;
 }

@@ -1,12 +1,12 @@
 import { Navigate, useParams } from "react-router-dom";
-import LoadState from "../models/LoadingState";
+import LoadState from "../../models/LoadingState";
 import React, { useEffect, useState } from "react";
-import productService from "../productService";
-import { useProducts } from "../contexts/ProductsProvider";
-import { useCart } from "../contexts/CartProvider";
-import { formatProductPrice } from "../models/Product";
-import { getProductById } from "../models/ProductList";
-import { useIsMounted } from "../utils";
+import productService from "../../productService";
+import { useProducts } from "../../contexts/ProductsProvider";
+import { useCart } from "../../contexts/CartProvider";
+import { formatProductPrice } from "../../models/Product";
+import { getProductById } from "../../models/ProductList";
+import { useIsMounted } from "../../utils";
 
 enum DisplayStates {
     DISPLAY,
@@ -98,8 +98,7 @@ const ProductView: React.FC = () => {
 
     return (
         <div>
-            {loadingDiv()}
-            {displayDiv()}
+            {loadingDiv() ?? displayDiv()}
         </div>
     );
 }

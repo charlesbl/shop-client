@@ -1,5 +1,4 @@
-import Product from "./Product";
-import { getProductById } from "./ProductList";
+import IProduct, { getProductById } from "./ProductFunctions";
 
 type CartMap = Map<string, number>;
 
@@ -18,7 +17,7 @@ export const removeAmountFromCart = (cart: CartMap, id: string, count = 1) => {
     }
 }
 
-export const removeUnavailableProductFromCart = (cart: CartMap, productList: Array<Product>) =>
+export const removeUnavailableProductFromCart = (cart: CartMap, productList: Array<IProduct>) =>
     Array.from(cart.keys())
         .filter((productId) => !getProductById(productList, productId))
         .forEach((productId) => cart.delete(productId));

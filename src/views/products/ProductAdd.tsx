@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useProducts } from "../contexts/ProductsProvider";
-import Product from "../models/Product";
-import productService from "../productService";
-import { regexPrice, useIsMounted } from "../utils";
-import PriceInput from "./shared/PriceInput";
+import { useProducts } from "../../contexts/ProductsProvider";
+import Product from "../../models/Product";
+import productService from "../../productService";
+import { useIsMounted, regexPrice } from "../../utils";
+import PriceInput from "../shared/PriceInput";
 
 interface ComponentState {
     name: string,

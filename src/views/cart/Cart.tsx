@@ -4,7 +4,7 @@ import { useCart } from "../../contexts/CartProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { getProductById } from "../../models/ProductList";
 
-const CartView: React.FC = () => {
+const Cart: React.FC = () => {
     const cart = useCart();
     const [products] = useProducts();
 
@@ -22,4 +22,4 @@ const CartView: React.FC = () => {
         </div>
     );
 }
-export default CartView;
+export default Cart;

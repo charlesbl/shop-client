@@ -1,5 +1,5 @@
 import axios from "axios";
-import Product from "./models/Product";
+import IProduct from "./models/ProductFunctions";
 
 const http = axios.create({
     baseURL: "http://localhost:3001/",
@@ -9,11 +9,11 @@ const http = axios.create({
 });
 
 const getAll = () => {
-    return http.get<Array<Product>>("/product/all");
+    return http.get<Array<IProduct>>("/product/all");
 }
 
-const create = (data: Product) => {
-    return http.put<Product>("/product/", data);
+const create = (data: IProduct) => {
+    return http.put<IProduct>("/product/", data);
 }
 
 const remove = (pId: string) => {
@@ -21,7 +21,7 @@ const remove = (pId: string) => {
 }
 
 const getById = (pId: string) => {
-    return http.get<Product>("/product/" + pId);
+    return http.get<IProduct>("/product/" + pId);
 }
 
 const productService = {

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import Product, { formatProductPrice } from "../models/Product";
-import "../css/ProductList.css";
-import LoadState from "../models/LoadingState";
-import React from "react";
-import { useCart } from "../contexts/CartProvider";
-import { useProducts } from "../contexts/ProductsProvider";
+import { useCart } from "../../contexts/CartProvider";
+import { useProducts } from "../../contexts/ProductsProvider";
+import LoadState from "../../models/LoadingState";
+import Product from "../../models/Product";
+import { formatProductPrice } from "../../models/ProductFunctions";
 
 const ProductList: React.FC = () => {
     const cart = useCart();

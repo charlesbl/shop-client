@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import LoadState from '../models/LoadingState';
-import Product, { isValidProduct, PRODUCTS_KEY } from '../models/Product';
+import IProduct, { isValidProduct, PRODUCTS_KEY } from '../models/ProductFunctions';
 import productService from '../productService';
 import { getLocalData, setLocalData } from '../utils';
 
-const ProductsContext = React.createContext({} as [Array<Product>, LoadState, () => void]);
+const ProductsContext = React.createContext({} as [Array<IProduct>, LoadState, () => void]);
 
 const ProductsProvider = (props: any) => {
     const productList = getLocalData(PRODUCTS_KEY) ?? [];
