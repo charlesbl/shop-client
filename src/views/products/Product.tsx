@@ -4,9 +4,8 @@ import React, { useEffect, useState } from "react";
 import productService from "../../productService";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { useCart } from "../../contexts/CartProvider";
-import { formatProductPrice } from "../../models/Product";
-import { getProductById } from "../../models/ProductList";
 import { useIsMounted } from "../../utils";
+import { formatProductPrice, getProductById } from "../../models/ProductFunctions";
 
 enum DisplayStates {
     DISPLAY,

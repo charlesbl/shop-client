@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
 import LoadState from "../../models/LoadingState";
-import Product from "../../models/Product";
-import { formatProductPrice } from "../../models/ProductFunctions";
+import IProduct, { formatProductPrice } from "../../models/ProductFunctions";
 
 const ProductList: React.FC = () => {
     const cart = useCart();
@@ -16,13 +15,13 @@ const ProductList: React.FC = () => {
     return (
         <div id="product-list" className={loadState === LoadState.LOADING ? "loading" : ""} >
             {loadState === LoadState.LOADING ? <div>Loading...</div> : ""}
-            {products?.map((product: Product) => renderProduct(product, cart.getCartQuantity(product.id), buyHandler(product.id)))}
+            {products?.map((product: IProduct) => renderProduct(product, cart.getCartQuantity(product.id), buyHandler(product.id)))}
         </div>
     );
 }
 
 
-const renderProduct = (product: Product, quantityInCart: number | undefined, buyHandler: () => void) => {
+const renderProduct = (product: IProduct, quantityInCart: number | undefined, buyHandler: () => void) => {
     return (
         <div key={product.id} className="short-product">
             <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>

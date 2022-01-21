@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useProducts } from "../../contexts/ProductsProvider";
-import Product from "../../models/Product";
+import IProduct from "../../models/ProductFunctions";
 import productService from "../../productService";
 import { useIsMounted, regexPrice } from "../../utils";
 import PriceInput from "../shared/PriceInput";
@@ -24,7 +24,7 @@ const ProjectAdd = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        const product: Product = {
+        const product: IProduct = {
             id: "",
             name: state.name,
             desc: state.desc,

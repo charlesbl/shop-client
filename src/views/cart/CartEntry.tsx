@@ -1,9 +1,9 @@
 import React, { } from "react";
 import { useCart } from "../../contexts/CartProvider";
-import Product from "../../models/Product";
+import IProduct from "../../models/ProductFunctions";
 
 interface ComponentProps {
-    product: Product,
+    product: IProduct,
     quantity: number
 }
 

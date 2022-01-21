@@ -2,7 +2,7 @@ import React from "react";
 import CartEntry from "./CartEntry";
 import { useCart } from "../../contexts/CartProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
-import { getProductById } from "../../models/ProductList";
+import { getProductById } from "../../models/ProductFunctions";
 
 const Cart: React.FC = () => {
     const cart = useCart();
