@@ -20,11 +20,16 @@
 #product-list .short-product p {
     padding-left: 0.5em;
 }
+#product-list .short-product .price-and-buy{
+    display: flex;
+}
 #product-list .short-product .price {
     display: inline;
     font-weight: bold;
     margin-right: 1em;
+    margin-top: auto;
+    margin-bottom: auto;
 }
-#product-list .short-product button {
-    display: inline;
+#product-list .short-product .buy{
+    margin: 0;
 }

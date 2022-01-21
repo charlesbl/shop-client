@@ -1,0 +1,11 @@
+.cart-quantity {
+    width: 2em;
+}
+.cart-quantity button {
+    width: 100%;
+    padding: 25%;
+}
+.cart-quantity div {
+    text-align: center;
+    margin: 0.5em;
+}

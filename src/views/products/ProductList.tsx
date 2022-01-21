@@ -20,9 +20,9 @@ const ProductList: React.FC = () => {
             <div key={product.id} className="short-product">
                 <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>
                 <p className="description">{product.desc}</p>
-                <div>
+                <div className="price-and-buy">
                     <div className="price">{formatProductPrice(product.price)}</div>
-                    {addProductDiv(product.id)}
+                    <div className="buy">{addProductDiv(product.id)}</div>
                 </div>
             </div>
         );

@@ -1,3 +1,4 @@
+import "../../css/CartEntry.css";
 import React, { } from "react";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { getProductById } from "../../models/ProductFunctions";
@@ -14,11 +15,14 @@ const CartEntry: React.FC<ComponentProps> = (props: ComponentProps) => {
     if (!product) return null;
 
     return (
-        <div key={props.productId}>
-            <div>
-                {product.name}
+        <div key={props.productId} className="cart-entry">
+            <div className="left">
+                <div className="name">{product.name}</div>
+                <div className="desc">{product.desc}</div>
             </div>
-            <ProductCartQuantity productId={props.productId} />
+            <div className="right">
+                <ProductCartQuantity productId={props.productId} />
+            </div>
         </div>
     );
 }

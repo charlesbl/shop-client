@@ -1,0 +1,31 @@
+.cart-entry {
+    margin: 0.6em;
+    padding: 1em;
+    background-color: rgb(175, 175, 175);
+    display: flex;
+    justify-content: space-between;
+}
+.cart-entry .left {
+    display: inline-block;
+}
+.cart-entry .right {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+.cart-entry .name {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.2em;
+}
+.cart-entry .desc {
+    text-align: justify;
+    margin: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
