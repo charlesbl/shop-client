@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
-import IProduct, { formatProductPrice } from "../../models/ProductFunctions";
+import { formatProductPrice, IProduct } from "../../models/ProductFunctions";
 import ProductCartQuantity from "../shared/ProductCartQuantity";
 
 const ProductList: React.FC = () => {

@@ -1,4 +1,4 @@
-import NumberFormat from "react-number-format"
+import { NumericFormat } from "react-number-format"
 
 type PriceInputProps = {
     name?: string;
@@ -14,7 +14,7 @@ const PriceInput = (props: PriceInputProps) => {
             props.onChange(e);
     }
 
-    return <NumberFormat
+    return <NumericFormat
         type="text"
         name="price"
         value={props.value}

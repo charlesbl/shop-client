@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useProducts } from "../../contexts/ProductsProvider";
-import IProduct from "../../models/ProductFunctions";
-import productService from "../../productService";
+import { ICreateProduct } from "../../models/ProductFunctions";
+import productService from "../../services/product.service";
 import { useIsMounted, regexPrice } from "../../utils";
 import PriceInput from "../shared/PriceInput";
 
@@ -24,8 +24,7 @@ const ProjectAdd = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        const product: IProduct = {
-            id: "",
+        const product: ICreateProduct = {
             name: state.name,
             desc: state.desc,
             price: state.price.replaceAll(".", "").replaceAll(",", "")

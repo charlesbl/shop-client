@@ -1,12 +1,15 @@
 export const PRODUCTS_KEY = "products";
 
-export default class IProduct {
-    constructor(
-        public readonly id: string,
-        public readonly name: string,
-        public readonly desc: string,
-        public readonly price: string) {
-    }
+export interface IProduct {
+    readonly id: string,
+    readonly name: string,
+    readonly desc: string,
+    readonly price: string
+}
+export interface ICreateProduct {
+    readonly name: string,
+    readonly desc: string,
+    readonly price: string
 }
 
 export const isValidProduct = (product: IProduct) => /^\d*$/.test(product.price);

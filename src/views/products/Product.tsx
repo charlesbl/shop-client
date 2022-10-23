@@ -1,7 +1,7 @@
 import "../../css/ProductList.css";
 import { Navigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import productService from "../../productService";
+import productService from "../../services/product.service";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { useCart } from "../../contexts/CartProvider";
 import { useIsMounted } from "../../utils";

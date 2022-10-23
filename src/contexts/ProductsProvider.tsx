@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LoadState from '../models/LoadingState';
-import IProduct, { isValidProduct, PRODUCTS_KEY } from '../models/ProductFunctions';
-import productService from '../productService';
+import { IProduct, isValidProduct, PRODUCTS_KEY } from '../models/ProductFunctions';
+import productService from '../services/product.service';
 import { getLocalData, setLocalData } from '../utils';
 
 const ProductsContext = React.createContext({} as [Array<IProduct>, LoadState, () => void]);

@@ -1,4 +1,4 @@
-import IProduct, { getProductById } from "./ProductFunctions";
+import { getProductById, IProduct } from "./ProductFunctions";
 
 type CartMap = Map<string, number>;
 
