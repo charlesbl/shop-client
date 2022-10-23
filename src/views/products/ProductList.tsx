@@ -17,12 +17,12 @@ const ProductList: React.FC = () => {
 
     const renderProduct = (product: IProduct) => {
         return (
-            <div key={product.id} className="short-product">
-                <h2 className="name"><Link to={`/product/${product.id}`}>{product.name}</Link></h2>
+            <div key={product._id} className="short-product">
+                <h2 className="name"><Link to={`/product/${product._id}`}>{product.name}</Link></h2>
                 <p className="description">{product.desc}</p>
                 <div className="price-and-buy">
                     <div className="price">{formatProductPrice(product.price)}</div>
-                    <div className="buy">{addProductDiv(product.id)}</div>
+                    <div className="buy">{addProductDiv(product._id)}</div>
                 </div>
             </div>
         );

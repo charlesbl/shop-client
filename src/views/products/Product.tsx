@@ -41,7 +41,7 @@ const ProductView: React.FC = () => {
             return;
         }
         setDisplayState(DisplayStates.REMOVING);
-        productService.remove(product.id).then(() => {
+        productService.remove(product._id).then(() => {
             updateProducts();
             if (!isMounted.current) return;
             setDisplayState(DisplayStates.REMOVED);
@@ -62,11 +62,11 @@ const ProductView: React.FC = () => {
     const productDiv = () => {
         return product ? (
             <div>
-                <div>{product.id}</div>
+                <div>{product._id}</div>
                 <div>{product.name}</div>
                 <div>{product.desc}</div>
                 <div>{formatProductPrice(product.price)}</div>
-                {addProductDiv(product.id)}
+                {addProductDiv(product._id)}
                 <div>
                     <button onClick={removeProduct}>Remove from database</button>
                 </div>
