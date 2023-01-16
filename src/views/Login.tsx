@@ -20,6 +20,14 @@ const Login = () => {
             setFailed(true)
         })
     }
+    const onSignup = async () => {
+        authService.signup(username, password).then((res) => {
+            console.log(res.data)
+            onLogin()
+        }).catch(() => {
+            setFailed(true)
+        })
+    }
     if(isLogin) return <Navigate to="/products" />;
 
     return (
@@ -41,6 +49,7 @@ const Login = () => {
                 <input type={"password"} onChange={e => setPassword(e.target.value)}></input>
             </div>
             <button onClick={() => onLogin()}>Login</button>
+            <button onClick={() => onSignup()}>Signup</button>
         </div>
     );
 }
