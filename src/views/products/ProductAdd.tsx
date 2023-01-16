@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { ICreateProduct } from "../../models/ProductFunctions";
 import productService from "../../services/product.service";
-import { useIsMounted, regexPrice } from "../../utils";
+import { useIsMounted, regexPrice, getLocalData } from "../../utils";
 import PriceInput from "../shared/PriceInput";
 
 interface ComponentState {
@@ -30,8 +30,13 @@ const ProjectAdd = () => {
             price: state.price.replaceAll(".", "").replaceAll(",", "")
         };
 
+        const accessToken = getLocalData("accessToken")
+        if(accessToken === undefined) {
+            setActionText("Error: Unauthorized")
+            return
+        }
         setActionText("Adding...");
-        await productService.create(product);
+        await productService.create(product, accessToken);
         updateProducts();
         if (!isMounted.current) return;
         setActionText("Added !");

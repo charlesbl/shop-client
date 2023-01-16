@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import productService from "../../services/product.service";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { useCart } from "../../contexts/CartProvider";
-import { useIsMounted } from "../../utils";
+import { getLocalData, useIsMounted } from "../../utils";
 import { formatProductPrice, getProductById } from "../../models/ProductFunctions";
 import ProductCartQuantity from "../shared/ProductCartQuantity";
 
@@ -40,8 +40,13 @@ const ProductView: React.FC = () => {
         if (!product) {
             return;
         }
+        const accessToken = getLocalData("accessToken")
+        if(accessToken === undefined) {
+            setDisplayState(DisplayStates.ERROR);
+            return
+        }
         setDisplayState(DisplayStates.REMOVING);
-        productService.remove(product._id).then(() => {
+        productService.remove(product._id, accessToken ).then(() => {
             updateProducts();
             if (!isMounted.current) return;
             setDisplayState(DisplayStates.REMOVED);

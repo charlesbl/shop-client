@@ -9,12 +9,12 @@ const getAll = () => {
     return http.get<Array<IProduct>>("");
 }
 
-const create = (data: ICreateProduct) => {
-    return http.post<IProduct>("", data);
+const create = (data: ICreateProduct, accessToken: string) => {
+    return http.post<IProduct>("", data, { headers: { Authorization: "Bearer " + accessToken } });
 }
 
-const remove = (pId: string) => {
-    return http.delete<string>(pId);
+const remove = (pId: string, accessToken: string) => {
+    return http.delete<string>(pId, { headers: { Authorization: "Bearer " + accessToken } });
 }
 
 const getById = (pId: string) => {
