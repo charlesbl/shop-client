@@ -7,6 +7,7 @@ import NotFound from './NotFound';
 import Product from './products/Product';
 import ProductAdd from './products/ProductAdd';
 import ProductList from './products/ProductList';
+import Login from './Login';
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
                         <Link to="/products">All Products</Link>
                         <Link to="/addproduct">Add Product</Link>
                         <Link to="/cart">Cart</Link>
+                        <Link to="/login">Login</Link>
                     </nav>
                 </header>
                 <div id="main">
@@ -27,6 +29,7 @@ const App = () => {
                         <Route path="/product/:productId" element={<Product />} />
                         <Route path="/addproduct/" element={<ProductAdd />} />
                         <Route path="/cart/" element={<Cart />} />
+                        <Route path="/login/" element={<Login />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div >
