@@ -1,8 +1,9 @@
+import { PropsWithChildren } from 'react'
 import AuthProvider from './AuthProvider'
 import CartProvider from './CartProvider'
 import ProductsProvider from './ProductsProvider'
 
-const AppProvider = (props: any): JSX.Element => {
+const AppProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren): JSX.Element => {
     return (
         <AuthProvider>
             <ProductsProvider>

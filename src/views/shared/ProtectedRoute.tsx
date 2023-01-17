@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthProvider'
 
-const ProtectedRoute = (): JSX.Element => {
+const ProtectedRoute: React.FC = (): JSX.Element => {
     const [token] = useAuth()
     return token !== undefined ? <Outlet /> : <Navigate to="/login" />
 }

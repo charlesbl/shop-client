@@ -6,7 +6,7 @@ interface PriceInputProps {
     onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined
 }
 
-const PriceInput = (props: PriceInputProps): JSX.Element => {
+const PriceInput: React.FC<PriceInputProps> = (props: PriceInputProps): JSX.Element => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         e.target.value = e.target.value.replaceAll('€', '')
         if (props.onChange != null) { props.onChange(e) }

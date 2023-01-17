@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthProvider'
 import authService from '../services/auth.service'
 import { useIsMounted } from '../utils'
 
-const Login = (): JSX.Element => {
+const Login: React.FC = (): JSX.Element => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isFailed, setFailed] = useState(false)

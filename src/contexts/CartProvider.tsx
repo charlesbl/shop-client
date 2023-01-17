@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import { addToCart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart'
 import { getLocalData, setLocalData } from '../utils'
 import { useProducts } from './ProductsProvider'
@@ -18,7 +18,7 @@ const CartContext = React.createContext<CartProviderStates>({
     removeAmountFromCart: () => {}
 })
 
-const CartProvider = (props: any): JSX.Element => {
+const CartProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren): JSX.Element => {
     const localCart = new Map<string, number>(getLocalData(CART_KEY))
     const [products] = useProducts()
 

@@ -61,7 +61,7 @@ const ProductView: React.FC = () => {
         if (cart.getCartQuantity(pid) !== undefined) { return <ProductCartQuantity productId={pid} /> } else {
             return (
                 <button onClick={() => cart.addToCart(pid)}>
-Add to cart
+                    Add to cart
                 </button>
             )
         }

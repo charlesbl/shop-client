@@ -12,7 +12,7 @@ import ProtectedRoute from './shared/ProtectedRoute'
 import { useIsLogged } from '../contexts/AuthProvider'
 import Logout from './Logout'
 
-const NavBar = (): JSX.Element => {
+const NavBar: React.FC = (): JSX.Element => {
     const isLogged = useIsLogged()
     return (
         <nav>

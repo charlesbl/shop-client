@@ -1,11 +1,11 @@
 import { useCart } from '../../contexts/CartProvider'
 import '../../css/ProductCartQuantity.css'
 
-interface ComponentProps {
+interface ProductCartQuantityProps {
     productId: string
 }
 
-const ProductCartQuantity = (props: ComponentProps): JSX.Element => {
+const ProductCartQuantity: React.FC<ProductCartQuantityProps> = (props: ProductCartQuantityProps): JSX.Element => {
     const cart = useCart()
 
     return (

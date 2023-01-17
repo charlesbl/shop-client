@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import LoadState from '../models/LoadingState'
 import { IProduct, isValidProduct, PRODUCTS_KEY } from '../models/ProductFunctions'
 import productService from '../services/product.service'
@@ -7,7 +7,7 @@ import { getLocalData, setLocalData } from '../utils'
 type ProductsProviderStates = [IProduct[], LoadState, () => void]
 const ProductsContext = React.createContext<ProductsProviderStates>([[], LoadState.LOADING, () => {}])
 
-const ProductsProvider = (props: any): JSX.Element => {
+const ProductsProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren): JSX.Element => {
     const productList = getLocalData(PRODUCTS_KEY) ?? []
 
     const [products, setProducts] = useState(productList)

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 
 const ACCESS_TOKEN_STORAGE = 'accessToken'
 type Token = string | undefined
 const AuthContext = React.createContext<[Token, (token: Token) => void]>([undefined, () => { }])
 
-const AuthProvider = (props: any): JSX.Element => {
+const AuthProvider: React.FC<PropsWithChildren> = (props: PropsWithChildren): JSX.Element => {
     const storageToken = localStorage.getItem(ACCESS_TOKEN_STORAGE)
     const [token, setToken] = useState<Token>(storageToken === null ? undefined : storageToken)
 

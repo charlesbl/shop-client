@@ -1,4 +1,4 @@
-const NotFound = (): JSX.Element => {
+const NotFound: React.FC = (): JSX.Element => {
     return (
         <div id="not-found">
             <h1>

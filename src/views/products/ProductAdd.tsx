@@ -12,7 +12,7 @@ interface ComponentState {
     price: string
 }
 
-const ProjectAdd = (): JSX.Element => {
+const ProjectAdd: React.FC = (): JSX.Element => {
     const defaultState: ComponentState = {
         name: 'Product name',
         desc: 'Description',
