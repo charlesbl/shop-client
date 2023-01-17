@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-const ACCESS_TOKEN_STORAGE = "accessToken"
+const ACCESS_TOKEN_STORAGE = 'accessToken'
 type Token = string | undefined
-const AuthContext = React.createContext<[Token, (token: Token) => void]>([undefined, () => { }]);
+const AuthContext = React.createContext<[Token, (token: Token) => void]>([undefined, () => { }])
 
-const AuthProvider = (props: any) => {
+const AuthProvider = (props: any): JSX.Element => {
     const storageToken = localStorage.getItem(ACCESS_TOKEN_STORAGE)
     const [token, setToken] = useState<Token>(storageToken === null ? undefined : storageToken)
 
-    const storeAndSetToken = (token: Token) => {
+    const storeAndSetToken = (token: Token): void => {
         if (token === undefined) {
             localStorage.removeItem(ACCESS_TOKEN_STORAGE)
         } else {
@@ -24,7 +24,7 @@ const AuthProvider = (props: any) => {
     )
 }
 
-export const useAuth = () => React.useContext(AuthContext)
-export const useIsLogged = () => useAuth()[0] !== undefined
+export const useAuth = (): [Token, (token: Token) => void] => React.useContext(AuthContext)
+export const useIsLogged = (): boolean => useAuth()[0] !== undefined
 
 export default AuthProvider

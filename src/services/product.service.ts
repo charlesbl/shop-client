@@ -1,24 +1,24 @@
-import axios from "axios";
-import { ICreateProduct, IProduct } from "../models/ProductFunctions";
+import axios, { AxiosResponse } from 'axios'
+import { ICreateProduct, IProduct } from '../models/ProductFunctions'
 
 const http = axios.create({
-    baseURL: "http://localhost:3001/products"
-});
+    baseURL: 'http://localhost:3001/products'
+})
 
-const getAll = () => {
-    return http.get<Array<IProduct>>("");
+const getAll = async (): Promise<AxiosResponse<IProduct[], any>> => {
+    return await http.get<IProduct[]>('')
 }
 
-const create = (data: ICreateProduct, accessToken: string) => {
-    return http.post<IProduct>("", data, { headers: { Authorization: "Bearer " + accessToken } });
+const create = async (data: ICreateProduct, accessToken: string): Promise<AxiosResponse<IProduct, any>> => {
+    return await http.post<IProduct>('', data, { headers: { Authorization: 'Bearer ' + accessToken } })
 }
 
-const remove = (pId: string, accessToken: string) => {
-    return http.delete<string>(pId, { headers: { Authorization: "Bearer " + accessToken } });
+const remove = async (pId: string, accessToken: string): Promise<AxiosResponse<string, any>> => {
+    return await http.delete<string>(pId, { headers: { Authorization: 'Bearer ' + accessToken } })
 }
 
-const getById = (pId: string) => {
-    return http.get<IProduct>(pId);
+const getById = async (pId: string): Promise<AxiosResponse<IProduct, any>> => {
+    return await http.get<IProduct>(pId)
 }
 
 const productService = {
@@ -26,6 +26,6 @@ const productService = {
     create,
     remove,
     getById
-};
+}
 
-export default productService;
+export default productService

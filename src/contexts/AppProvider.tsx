@@ -1,8 +1,8 @@
-import AuthProvider from "./AuthProvider";
-import CartProvider from "./CartProvider";
-import ProductsProvider from "./ProductsProvider";
+import AuthProvider from './AuthProvider'
+import CartProvider from './CartProvider'
+import ProductsProvider from './ProductsProvider'
 
-const AppProvider = (props: any) => {
+const AppProvider = (props: any): JSX.Element => {
     return (
         <AuthProvider>
             <ProductsProvider>
@@ -11,6 +11,6 @@ const AppProvider = (props: any) => {
                 </CartProvider>
             </ProductsProvider>
         </AuthProvider>
-    );
+    )
 }
-export default AppProvider;
+export default AppProvider

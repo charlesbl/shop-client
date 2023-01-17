@@ -1,9 +1,9 @@
-import { Navigate, Outlet } from "react-router-dom"
-import { useAuth } from "../../contexts/AuthProvider"
+import { Navigate, Outlet } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthProvider'
 
-const ProtectedRoute = () => {
+const ProtectedRoute = (): JSX.Element => {
     const [token] = useAuth()
-    return token ? <Outlet /> : <Navigate to="/login" />;
+    return token !== undefined ? <Outlet /> : <Navigate to="/login" />
 }
 
 export default ProtectedRoute

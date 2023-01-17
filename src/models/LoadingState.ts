@@ -3,4 +3,4 @@ enum LoadState {
     SUCCESS,
     ERROR
 }
-export default LoadState;
+export default LoadState

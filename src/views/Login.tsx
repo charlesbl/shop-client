@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthProvider";
-import authService from "../services/auth.service";
-import { useIsMounted } from "../utils";
+import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthProvider'
+import authService from '../services/auth.service'
+import { useIsMounted } from '../utils'
 
-const Login = () => {
+const Login = (): JSX.Element => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isFailed, setFailed] = useState(false)
@@ -12,7 +12,7 @@ const Login = () => {
     const isMounted = useIsMounted()
     const [, setToken] = useAuth()
 
-    const onLogin = async () => {
+    const onLogin = async (): Promise<void> => {
         authService.login(username, password).then((res) => {
             const accessToken = res.data.accessToken
             setToken(accessToken)
@@ -22,37 +22,58 @@ const Login = () => {
             setFailed(true)
         })
     }
-    const onSignup = async () => {
+    const onSignup = async (): Promise<void> => {
         authService.signup(username, password).then((res) => {
             console.log(res.data)
-            onLogin()
+            void onLogin()
         }).catch(() => {
             setFailed(true)
         })
     }
-    if (isLogin) return <Navigate to="/products" />;
+    if (isLogin) return <Navigate to="/products" />
 
     return (
         <div id="login">
             <h1>
                 Login
             </h1>
-            {isFailed &&
+
+            {isFailed && (
                 <div>
                     Login failed
                 </div>
-            }
+            )}
+
             <div>
-                <label>Username</label>
-                <input type={"text"} onChange={e => setUsername(e.target.value)}></input>
+                <label>
+                    Username
+                </label>
+
+                <input
+                    onChange={e => setUsername(e.target.value)}
+                    type="text"
+                />
             </div>
+
             <div>
-                <label>Password</label>
-                <input type={"password"} onChange={e => setPassword(e.target.value)}></input>
+                <label>
+                    Password
+                </label>
+
+                <input
+                    onChange={e => setPassword(e.target.value)}
+                    type="password"
+                />
             </div>
-            <button onClick={() => onLogin()}>Login</button>
-            <button onClick={() => onSignup()}>Signup</button>
+
+            <button onClick={() => { void onLogin() }}>
+                Login
+            </button>
+
+            <button onClick={() => { void onSignup() }}>
+                Signup
+            </button>
         </div>
-    );
+    )
 }
-export default Login;
+export default Login

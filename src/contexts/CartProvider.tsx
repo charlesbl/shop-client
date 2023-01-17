@@ -1,48 +1,53 @@
-import React, { useState } from 'react';
-import { addToCart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart';
-import { getLocalData, setLocalData } from '../utils';
-import { useProducts } from './ProductsProvider';
+import React, { useState } from 'react'
+import { addToCart, removeAmountFromCart, removeUnavailableProductFromCart } from '../models/Cart'
+import { getLocalData, setLocalData } from '../utils'
+import { useProducts } from './ProductsProvider'
 
-type IContextCart = {
-    getCartQuantity: (id: string) => number | undefined;
-    getAll: () => IterableIterator<[string, number]>;
-    addToCart: (id: string, count?: number) => void;
-    removeAmountFromCart: (id: string, count?: number) => void;
+interface CartProviderStates {
+    getCartQuantity: (id: string) => number | undefined
+    getAll: () => Array<[string, number]>
+    addToCart: (id: string, count?: number) => void
+    removeAmountFromCart: (id: string, count?: number) => void
 }
 
-const CART_KEY = "cart";
-const CartContext = React.createContext({} as IContextCart);
+const CART_KEY = 'cart'
+const CartContext = React.createContext<CartProviderStates>({
+    getCartQuantity: () => undefined,
+    getAll: () => [],
+    addToCart: () => {},
+    removeAmountFromCart: () => {}
+})
 
-const CartProvider = (props: any) => {
-    const localCart = new Map<string, number>(getLocalData(CART_KEY));
-    const [products] = useProducts();
+const CartProvider = (props: any): JSX.Element => {
+    const localCart = new Map<string, number>(getLocalData(CART_KEY))
+    const [products] = useProducts()
 
-    const [productQuantityMap, setState] = useState(localCart);
+    const [productQuantityMap, setState] = useState(localCart)
 
-    const updateAndSave = () => {
-        removeUnavailableProductFromCart(productQuantityMap, products);
-        setState(new Map<string, number>(productQuantityMap));
-        setLocalData(CART_KEY, Array.from(productQuantityMap.entries()));
+    const updateAndSave = (): void => {
+        removeUnavailableProductFromCart(productQuantityMap, products)
+        setState(new Map<string, number>(productQuantityMap))
+        setLocalData(CART_KEY, Array.from(productQuantityMap.entries()))
     }
 
-    const contextCart: IContextCart = {
+    const contextCart: CartProviderStates = {
         getCartQuantity: (id) => productQuantityMap.get(id),
-        getAll: () => productQuantityMap.entries(),
+        getAll: () => Array.from(productQuantityMap.entries()),
         addToCart: (id, count) => {
-            addToCart(productQuantityMap, id, count);
-            updateAndSave();
+            addToCart(productQuantityMap, id, count)
+            updateAndSave()
         },
         removeAmountFromCart: (id, count) => {
-            removeAmountFromCart(productQuantityMap, id, count);
-            updateAndSave();
+            removeAmountFromCart(productQuantityMap, id, count)
+            updateAndSave()
         }
     }
     return (
         <CartContext.Provider value={contextCart}>
             {props.children}
         </CartContext.Provider>
-    );
+    )
 }
-export default CartProvider;
+export default CartProvider
 
-export const useCart = () => React.useContext(CartContext);
+export const useCart = (): CartProviderStates => React.useContext(CartContext)
