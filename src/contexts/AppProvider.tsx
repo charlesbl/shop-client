@@ -1,13 +1,16 @@
+import AuthProvider from "./AuthProvider";
 import CartProvider from "./CartProvider";
 import ProductsProvider from "./ProductsProvider";
 
 const AppProvider = (props: any) => {
     return (
-        <ProductsProvider>
-            <CartProvider>
-                {props.children}
-            </CartProvider>
-        </ProductsProvider>
+        <AuthProvider>
+            <ProductsProvider>
+                <CartProvider>
+                    {props.children}
+                </CartProvider>
+            </ProductsProvider>
+        </AuthProvider>
     );
 }
 export default AppProvider;
