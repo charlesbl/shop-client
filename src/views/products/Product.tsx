@@ -7,7 +7,7 @@ import { useCart } from '../../contexts/CartProvider'
 import { useIsMounted } from '../../utils'
 import { formatProductPrice, getProductById } from '../../models/ProductFunctions'
 import ProductCartQuantity from '../shared/ProductCartQuantity'
-import { useAuth } from '../../contexts/AuthProvider'
+import { useAuth, useIsLogged } from '../../contexts/AuthProvider'
 
 enum DisplayStates {
     DISPLAY,
@@ -25,9 +25,10 @@ const ProductView: React.FC = () => {
     const { productId } = useParams<ComponentParams>()
     const [displayState, setDisplayState] = useState(DisplayStates.DISPLAY)
     const [products, , updateProducts] = useProducts()
+    const [token] = useAuth()
     const cart = useCart()
     const isMounted = useIsMounted()
-    const [token] = useAuth()
+    const isLogged = useIsLogged()
 
     const product = productId !== undefined ? getProductById(products, productId) : undefined
 
@@ -57,24 +58,10 @@ const ProductView: React.FC = () => {
         })
     }
 
-    const addProductDiv = (pid: string): JSX.Element => {
-        if (cart.getCartQuantity(pid) !== undefined) { return <ProductCartQuantity productId={pid} /> } else {
-            return (
-                <button onClick={() => cart.addToCart(pid)}>
-                    Add to cart
-                </button>
-            )
-        }
-    }
-
     const productDiv = (): JSX.Element | undefined => {
         return (product != null)
             ? (
                 <div>
-                    <div>
-                        {product._id}
-                    </div>
-
                     <div>
                         {product.name}
                     </div>
@@ -87,13 +74,21 @@ const ProductView: React.FC = () => {
                         {formatProductPrice(product.price)}
                     </div>
 
-                    {addProductDiv(product._id)}
+                    {cart.getCartQuantity(product._id) === undefined
+                        ? (
+                            <button onClick={() => cart.addToCart(product._id)}>
+                                Add to cart
+                            </button>
+                        )
+                        : <ProductCartQuantity productId={product._id} />}
 
-                    <div>
-                        <button onClick={removeProduct}>
+                    {isLogged && (
+                        <div>
+                            <button onClick={removeProduct}>
                         Remove from database
-                        </button>
-                    </div>
+                            </button>
+                        </div>
+                    )}
                 </div>
             )
             : undefined

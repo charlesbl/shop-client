@@ -1,6 +1,4 @@
-export const PRODUCTS_KEY = 'products'
-
-export interface IProduct {
+export interface Product {
     readonly _id: string
     readonly name: string
     readonly desc: string
@@ -12,6 +10,6 @@ export interface ICreateProduct {
     readonly price: string
 }
 
-export const isValidProduct = (product: IProduct): boolean => /^\d*$/.test(product.price)
+export const isValidProduct = (product: Product): boolean => /^\d*$/.test(product.price)
 export const formatProductPrice = (price: string): string => `${(Number.parseInt(price) / 100).toFixed(2)} €`
-export const getProductById = (productList: IProduct[], id: string): IProduct | undefined => productList.find(p => p._id === id)
+export const getProductById = (productList: Product[], id: string): Product | undefined => productList.find(p => p._id === id)

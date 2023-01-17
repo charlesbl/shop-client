@@ -21,7 +21,7 @@ const NavBar: React.FC = (): JSX.Element => {
             </Link>
 
             <Link to="/products">
-                All Products
+                Products
             </Link>
 
             {isLogged && (

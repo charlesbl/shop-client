@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../../contexts/CartProvider'
 import { useProducts } from '../../contexts/ProductsProvider'
-import { formatProductPrice, IProduct } from '../../models/ProductFunctions'
+import { formatProductPrice, Product } from '../../models/ProductFunctions'
 import ProductCartQuantity from '../shared/ProductCartQuantity'
 
 const ProductList: React.FC = () => {
@@ -18,7 +18,7 @@ const ProductList: React.FC = () => {
         }
     }
 
-    const renderProduct = (product: IProduct): JSX.Element => {
+    const renderProduct = (product: Product): JSX.Element => {
         return (
             <div
                 className="short-product"
@@ -48,7 +48,7 @@ const ProductList: React.FC = () => {
 
     return (
         <div id="product-list">
-            {products?.map((product: IProduct) => renderProduct(product))}
+            {products?.map((product: Product) => renderProduct(product))}
         </div>
     )
 }
