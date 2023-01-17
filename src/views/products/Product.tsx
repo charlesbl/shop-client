@@ -7,6 +7,7 @@ import { useCart } from "../../contexts/CartProvider";
 import { getLocalData, useIsMounted } from "../../utils";
 import { formatProductPrice, getProductById } from "../../models/ProductFunctions";
 import ProductCartQuantity from "../shared/ProductCartQuantity";
+import { useAuth } from "../../contexts/AuthProvider";
 
 enum DisplayStates {
     DISPLAY,
@@ -26,6 +27,7 @@ const ProductView: React.FC = () => {
     const [products, , updateProducts] = useProducts();
     const cart = useCart();
     const isMounted = useIsMounted();
+    const [token] = useAuth()
 
     const product = productId ? getProductById(products, productId) : undefined;
 
@@ -40,13 +42,12 @@ const ProductView: React.FC = () => {
         if (!product) {
             return;
         }
-        const accessToken = getLocalData("accessToken")
-        if(accessToken === undefined) {
+        if (token === undefined) {
             setDisplayState(DisplayStates.ERROR);
             return
         }
         setDisplayState(DisplayStates.REMOVING);
-        productService.remove(product._id, accessToken ).then(() => {
+        productService.remove(product._id, token).then(() => {
             updateProducts();
             if (!isMounted.current) return;
             setDisplayState(DisplayStates.REMOVED);

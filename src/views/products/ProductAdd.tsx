@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../../contexts/AuthProvider";
 import { useProducts } from "../../contexts/ProductsProvider";
 import { ICreateProduct } from "../../models/ProductFunctions";
 import productService from "../../services/product.service";
@@ -20,6 +21,7 @@ const ProjectAdd = () => {
     const [actionText, setActionText] = useState<string | undefined>(undefined);
     const isMounted = useIsMounted();
     const [, , updateProducts] = useProducts();
+    const [token] = useAuth()
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -30,13 +32,12 @@ const ProjectAdd = () => {
             price: state.price.replaceAll(".", "").replaceAll(",", "")
         };
 
-        const accessToken = getLocalData("accessToken")
-        if(accessToken === undefined) {
+        if (token === undefined) {
             setActionText("Error: Unauthorized")
             return
         }
         setActionText("Adding...");
-        await productService.create(product, accessToken);
+        await productService.create(product, token);
         updateProducts();
         if (!isMounted.current) return;
         setActionText("Added !");
