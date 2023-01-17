@@ -22,18 +22,22 @@ const Login: React.FC = (): JSX.Element => {
             setFailed(true)
         })
     }
-    const onSignup = async (): Promise<void> => {
-        authService.signup(username, password).then((res) => {
-            console.log(res.data)
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+        e.preventDefault()
+        void onLogin()
+    }
+    const handleSignupButton = (): void => {
+        authService.signup(username, password).then(() => {
             void onLogin()
         }).catch(() => {
             setFailed(true)
         })
     }
+
     if (isLogin) return <Navigate to="/products" />
 
     return (
-        <div id="login">
+        <form onSubmit={handleSubmit}>
             <h1>
                 Login
             </h1>
@@ -60,14 +64,14 @@ const Login: React.FC = (): JSX.Element => {
                 <input onChange={e => setPassword(e.target.value)} type="password" />
             </div>
 
-            <button onClick={() => { void onLogin() }}>
+            <button type='submit'>
                 Login
             </button>
 
-            <button onClick={() => { void onSignup() }}>
+            <button onClick={handleSignupButton} type='button'>
                 Signup
             </button>
-        </div>
+        </form>
     )
 }
 export default Login
