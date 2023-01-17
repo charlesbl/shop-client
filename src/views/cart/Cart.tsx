@@ -9,8 +9,7 @@ const Cart: React.FC = () => {
         return (
             <CartEntry
                 key={(productId)}
-                productId={productId}
-            />
+                productId={productId} />
         )
     })
 

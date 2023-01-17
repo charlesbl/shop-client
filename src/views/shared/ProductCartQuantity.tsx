@@ -11,7 +11,7 @@ const ProductCartQuantity = (props: ComponentProps): JSX.Element => {
     return (
         <div className="cart-quantity">
             <button onClick={() => cart.addToCart(props.productId)}>
-+
+                +
             </button>
 
             <div>
@@ -19,7 +19,7 @@ const ProductCartQuantity = (props: ComponentProps): JSX.Element => {
             </div>
 
             <button onClick={() => cart.removeAmountFromCart(props.productId)}>
--
+                -
             </button>
         </div>
     )

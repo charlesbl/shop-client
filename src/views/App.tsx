@@ -61,44 +61,36 @@ const App = (): JSX.Element => {
                     <Routes>
                         <Route
                             element={<Home />}
-                            path="/"
-                        />
+                            path="/" />
 
                         <Route
                             element={<ProductList />}
-                            path="/products"
-                        />
+                            path="/products" />
 
                         <Route
                             element={<Product />}
-                            path="/product/:productId"
-                        />
+                            path="/product/:productId" />
 
                         <Route
                             element={<Cart />}
-                            path="/cart/"
-                        />
+                            path="/cart/" />
 
                         <Route
                             element={<Login />}
-                            path="/login/"
-                        />
+                            path="/login/" />
 
                         <Route
                             element={<Logout />}
-                            path="/logout/"
-                        />
+                            path="/logout/" />
 
                         <Route
                             element={<NotFound />}
-                            path="*"
-                        />
+                            path="*" />
 
                         <Route element={<ProtectedRoute />}>
                             <Route
                                 element={<ProductAdd />}
-                                path="/addproduct/"
-                            />
+                                path="/addproduct/" />
                         </Route>
                     </Routes>
                 </div >

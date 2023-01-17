@@ -13,7 +13,7 @@ const Home = (): JSX.Element => {
             </p>
 
             <Link to="/products">
-See our products
+                See our products
             </Link>
         </div>
     )

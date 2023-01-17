@@ -56,10 +56,7 @@ const ProjectAdd = (): JSX.Element => {
     const verifyForm = (): boolean => regexPrice.test(state.price)
 
     return (
-        <form
-            id="Add"
-            onSubmit={(e) => { void handleSubmit(e) }}
-        >
+        <form id="Add" onSubmit={(e) => { void handleSubmit(e) }}>
             <div>
                 Name:
                 {' '}
@@ -68,8 +65,7 @@ const ProjectAdd = (): JSX.Element => {
                     name="name"
                     onChange={handleChange}
                     type="text"
-                    value={state.name}
-                />
+                    value={state.name} />
             </div>
 
             <div>
@@ -80,8 +76,7 @@ const ProjectAdd = (): JSX.Element => {
                     name="desc"
                     onChange={handleChange}
                     type="text"
-                    value={state.desc}
-                />
+                    value={state.desc} />
             </div>
 
             <div>
@@ -91,16 +86,14 @@ const ProjectAdd = (): JSX.Element => {
                 <PriceInput
                     name="price"
                     onChange={handleChange}
-                    value={state.price}
-                />
+                    value={state.price} />
             </div>
 
             <div>
                 <input
                     disabled={!verifyForm() || actionText !== undefined}
                     type="submit"
-                    value="Add product"
-                />
+                    value="Add product" />
             </div>
 
             {actionText !== undefined

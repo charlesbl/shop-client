@@ -22,8 +22,7 @@ const ProductList: React.FC = () => {
         return (
             <div
                 className="short-product"
-                key={product._id}
-            >
+                key={product._id}>
                 <h2 className="name">
                     <Link to={`/product/${product._id}`}>
                         {product.name}

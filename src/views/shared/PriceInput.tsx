@@ -24,8 +24,7 @@ const PriceInput = (props: PriceInputProps): JSX.Element => {
             suffix="€"
             thousandsGroupStyle="thousand"
             type="text"
-            value={props.value}
-        />
+            value={props.value} />
     )
 }
 export default PriceInput

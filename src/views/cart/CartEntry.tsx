@@ -17,8 +17,7 @@ const CartEntry: React.FC<ComponentProps> = (props: ComponentProps) => {
     return (
         <div
             className="cart-entry"
-            key={props.productId}
-        >
+            key={props.productId} >
             <div className="left">
                 <div className="name">
                     {product.name}

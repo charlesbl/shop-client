@@ -91,7 +91,7 @@ Add to cart
 
                     <div>
                         <button onClick={removeProduct}>
-Remove from database
+                        Remove from database
                         </button>
                     </div>
                 </div>

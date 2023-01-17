@@ -49,10 +49,7 @@ const Login = (): JSX.Element => {
                     Username
                 </label>
 
-                <input
-                    onChange={e => setUsername(e.target.value)}
-                    type="text"
-                />
+                <input onChange={e => setUsername(e.target.value)} type="text" />
             </div>
 
             <div>
@@ -60,10 +57,7 @@ const Login = (): JSX.Element => {
                     Password
                 </label>
 
-                <input
-                    onChange={e => setPassword(e.target.value)}
-                    type="password"
-                />
+                <input onChange={e => setPassword(e.target.value)} type="password" />
             </div>
 
             <button onClick={() => { void onLogin() }}>
